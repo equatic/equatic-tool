@@ -1,0 +1,29 @@
+{
+  "bundle" : "equatic-bundle",
+  "assets": [
+    {
+      "name": "datatables",
+      "version": "1.10.7",
+      "type": "js",
+      "locations": {
+        "webapp": "/js/jquery.dataTables.js"
+      }
+    },
+    {
+      "name": "bootstrap3-theme-js",
+      "version": "1.10.7",
+      "type": "js",
+      "locations": {
+        "webapp": "/js/dataTables.bootstrap.js"
+      }
+    },
+    {
+      "name": "bootstrap3-theme-css",
+      "version": "1.10.7",
+      "type": "css",
+      "locations": {
+        "webapp": "/css/dataTables.bootstrap.css"
+      }
+    }
+  ]
+}

@@ -1,0 +1,2 @@
+INSERT INTO DATA_SHEET_VALUES (CODE, COLUMN_TYPE, VALUE) VALUES ('COURSE_CATALOGUE_COMPLETE', 'COURSE_CATALOGUE',
+                                                                 'Complete? (all needed information to make your choices was available, including language of instruction and grade distribution)');

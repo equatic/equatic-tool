@@ -1,0 +1,109 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<body>
+<!--/*@thymesVar id="menuClass" type="String"*/-->
+<!--/*@thymesVar id="menu" type="be.ugent.equatic.web.util.Menu"*/-->
+<ul layout:fragment="menu(menuClass)" class="menu" th:classappend="${menuClass}" th:if="${menu}">
+  <li class="menu-item-has-children super-admin-menu" sec:authorize="hasAuthority('ROLE_ADMIN_SUPER')"
+      th:classappend="${menu.isActive('SUPER_ADMIN_MENU')} ? 'current_page_item'">
+    <a href="#" th:text="#{equatic.menu.admin.super.main}">Super admin</a>
+    <ul class="sub-menu">
+      <li>
+        <a href="#" th:href="@{/admin/super/admins}" th:text="#{equatic.admin.super.admins.title}">
+          List of administrators
+        </a>
+      </li>
+      <li>
+        <a href="#" th:href="@{/admin/super/institutions}" th:text="#{equatic.admin.institutions.title}">
+          List of institutions
+        </a>
+      </li>
+      <li>
+        <a href="#" th:href="@{/admin/super/academicYears}" th:text="#{equatic.admin.super.academicYears.title}">
+          List of academic years
+        </a>
+      </li>
+      <li>
+        <a href="#" th:href="@{/admin/super/dataSheetUpload}" th:text="#{equatic.admin.dataSheetUpload.title}">
+          Data upload
+        </a>
+      </li>
+    </ul>
+  </li>
+  <li class="menu-item-has-children" sec:authorize="hasAuthority('ROLE_ADMIN_NATIONAL')"
+      th:classappend="${menu.isActive('NATIONAL_ADMIN_MENU')} ? 'current_page_item'">
+    <a href="#" th:text="#{equatic.menu.admin.national.main}">National admin</a>
+    <ul class="sub-menu">
+      <li>
+        <a href="#" th:href="@{/admin/national/users}" th:text="#{equatic.users.menuTitle}">
+          List of users
+        </a>
+      </li>
+      <li>
+        <a href="#" th:href="@{/admin/institutions}" th:text="#{equatic.admin.institutions.title}">Institutions</a>
+      </li>
+      <li>
+        <a href="#" th:href="@{/admin/national/institutionsScores}" th:text="#{equatic.institutionsScores.title}">
+          Institution's scores
+        </a>
+      </li>
+    </ul>
+  </li>
+  <li class="menu-item-has-children institutional-admin-menu"
+      sec:authorize="hasAuthority('ROLE_ADMIN_INSTITUTIONAL')"
+      th:classappend="${menu.isActive('INSTITUTIONAL_ADMIN_MENU')} ? 'current_page_item'">
+    <a href="#" th:text="#{equatic.menu.admin.institutional.main}">Institutional admin</a>
+    <ul class="sub-menu">
+      <li>
+        <a href="#" th:href="@{/admin/institutional/users}" th:text="#{equatic.users.menuTitle}">
+          List of users
+        </a>
+      </li>
+      <li>
+        <a href="#" th:href="@{/admin/institutions}" th:text="#{equatic.admin.institutions.title}">Institutions</a>
+      </li>
+      <li>
+        <a href="#" th:href="@{/admin/institutional/dataSheetUpload}" th:text="#{equatic.admin.dataSheetUpload.title}">
+          Data upload
+        </a>
+      </li>
+      <li>
+        <a href="#" th:href="@{/admin/institutional/scoreInterpretation}"
+           th:text="#{equatic.admin.institutional.scoreInterpretation.title}">
+          Score interpretation
+        </a>
+      </li>
+    </ul>
+  </li>
+  <li class="menu-item-has-children"
+      sec:authorize="hasAuthority('ROLE_USER_NATIONAL')"
+      th:classappend="${menu.isActive('NATIONAL_USER_MENU')} ? 'current_page_item'">
+    <a href="#" th:text="#{equatic.menu.user.national.main}">National user</a>
+    <ul class="sub-menu">
+      <li>
+        <a href="#" th:href="@{/user/national/report}" th:text="#{equatic.user.national.report.title}">Report</a>
+      </li>
+    </ul>
+  </li>
+  <li class="menu-item-has-children"
+      sec:authorize="hasAuthority('ROLE_USER_INSTITUTIONAL')"
+      th:classappend="${menu.isActive('INSTITUTIONAL_USER_MENU')} ? 'current_page_item'">
+    <a href="#" th:text="#{equatic.menu.user.institutional.main}">Institutional user</a>
+    <ul class="sub-menu">
+      <li>
+        <a href="#" th:href="@{/user/institutional/institutionReport}"
+           th:text="#{equatic.user.institutional.institutionReport.title}">
+          Institution report
+        </a>
+      </li>
+      <li>
+        <a href="#" th:href="@{/user/institutional/institutionsScores}" th:text="#{equatic.institutionsScores.title}">
+          Institution's scores
+        </a>
+      </li>
+    </ul>
+  </li>
+</ul>
+</body>
+</html>

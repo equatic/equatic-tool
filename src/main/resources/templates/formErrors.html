@@ -1,0 +1,11 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<body layout:fragment="formErrors(errors)">
+<div id="error-box" class="alert alert-danger">
+  <!--/*@thymesVar id="errors" type="java.util.List"*/-->
+  <p th:each="error : ${errors}" th:text="${error}">
+    Validation error
+  </p>
+</div>
+</body>
+</html>

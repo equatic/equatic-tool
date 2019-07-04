@@ -1,0 +1,16 @@
+li.broad-isced[data-expanded="no"] .expand:before {
+    content: "\e250";
+}
+
+li.broad-isced[data-expanded="yes"] .expand:before {
+    content: "\e252";
+}
+
+ul.narrow-isceds {
+    padding-left: 45px;
+    display: none;
+}
+
+#select-isceds label {
+    font-weight: normal;
+}

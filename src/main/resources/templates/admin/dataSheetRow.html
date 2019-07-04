@@ -1,0 +1,44 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<body layout:fragment="dataSheetRow(code,institution,academicYear)">
+<div class="col-md-7">
+  <!--/*@thymesVar id="code" type="java.lang.String"*/-->
+  <form th:action="@{dataSheetUpload/{code}(instId=${institution?.id},year=${academicYear.academicYear},
+        code=${code})}"
+        method="post" enctype="multipart/form-data" class="form-inline">
+    <!--suppress ThymeleafMessagesResolveInspection -->
+    <h5 th:text="#{equatic.admin.uploadData.__${code}__}">
+      Upload
+    </h5>
+
+    <span layout:include="fileUpload :: fileUpload"></span>
+
+    <a role="button" th:href="@{dataSheetUpload/{code}/export(instId=${institution?.id},
+       year=${academicYear.academicYear},code=${code})}"
+       class="btn btn-primary btn-sm" th:text="#{equatic.export}">
+      Export
+    </a>
+  </form>
+</div>
+<div class="col-md-5" th:with="uploadStats = ${uploadStats[T(be.ugent.equatic.domain.DataSheetCode).__${code}__]},
+     rowsCountMessage = ${#messages.msgOrNull('equatic.admin.uploadData.__${code}__.rowsCount')}">
+  <!--/*@thymesVar id="uploadStats" type="be.ugent.equatic.domain.UploadStat"*/-->
+  <div class="alert" th:classappend="${uploadStats} ? 'alert-success' : 'alert-danger'">
+    <!--/*@thymesVar id="rowsCountMessage" type="String"*/-->
+    <div class="row" th:if="${rowsCountMessage}">
+      <div class="col-sm-10 text-right">
+        <span th:text="${rowsCountMessage}">Rows count</span>:
+      </div>
+      <div class="col-sm-2" th:text="${uploadStats} ? ${uploadStats.rowsCount} : 0"></div>
+    </div>
+    <div class="row">
+      <div class="col-sm-10 text-right">
+        <!--suppress ThymeleafMessagesResolveInspection -->
+        <span th:text="#{equatic.admin.uploadData.__${code}__.institutionsCount}">Institutions count</span>:
+      </div>
+      <div class="col-sm-2" th:text="${uploadStats} ? ${uploadStats.institutionsCount} : 0"></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

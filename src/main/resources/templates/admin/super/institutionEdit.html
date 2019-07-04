@@ -1,0 +1,109 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+  <title th:text="#{equatic.admin.super.institutionEdit.title}">
+    Title
+  </title>
+</head>
+<body>
+<div layout:fragment="title" th:text="#{equatic.admin.super.institutionEdit.title}">
+  Title
+</div>
+<div layout:fragment="container" class="container">
+  <div class="row">
+    <div class="col-md-offset-2 col-md-8">
+      <form class="form-horizontal" th:object="${institution}" method="post">
+        <!--/*@thymesVar id="_csrf" type="org.springframework.security.web.csrf.CsrfToken"*/-->
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+        <div th:if="${#fields.hasErrors('*')}" class="col-sm-offset-2 col-sm-8">
+          <div layout:include="formErrors :: formErrors(errors=${#fields.errors('*')})">
+            Form errors
+          </div>
+        </div>
+
+        <div class="form-group" th:classappend="${#fields.hasErrors('pic')} ? 'has-error'">
+          <label for="input-pic" class="col-sm-4 control-label" th:text="#{equatic.pic}">PIC</label>
+
+          <div class="col-sm-6">
+            <input type="text" class="form-control" id="input-pic" th:placeholder="#{equatic.pic}"
+                   th:field="*{pic}"/>
+          </div>
+        </div>
+        <div class="form-group" th:classappend="${#fields.hasErrors('erasmusCode')} ? 'has-error'">
+          <label for="input-erasmusCode" class="col-sm-4 control-label" th:text="#{equatic.erasmusCode}">Erasmus
+            code</label>
+
+          <div class="col-sm-6">
+            <input type="text" class="form-control" id="input-erasmusCode" th:placeholder="#{equatic.erasmusCode}"
+                   th:field="*{erasmusCode}"/>
+          </div>
+        </div>
+        <div class="form-group required" th:classappend="${#fields.hasErrors('name')} ? 'has-error'">
+          <label for="input-name" class="col-sm-4 control-label" th:text="#{equatic.name}">Name</label>
+
+          <div class="col-sm-6">
+            <input type="text" class="form-control" id="input-name" th:placeholder="#{equatic.name}"
+                   th:field="*{name}"/>
+          </div>
+        </div>
+        <div class="form-group" th:classappend="${#fields.hasErrors('nameEn')} ? 'has-error'">
+          <label for="input-nameEn" class="col-sm-4 control-label" th:text="#{equatic.nameEn}">Name in English</label>
+
+          <div class="col-sm-6">
+            <input type="text" class="form-control" id="input-nameEn" th:placeholder="#{equatic.nameEn}"
+                   th:field="*{nameEn}"/>
+          </div>
+        </div>
+        <div class="form-group" th:classappend="${#fields.hasErrors('url')} ? 'has-error'">
+          <label for="input-url" class="col-sm-4 control-label" th:text="#{equatic.url}">URL</label>
+
+          <div class="col-sm-6">
+            <input type="text" class="form-control" id="input-url" th:placeholder="#{equatic.url}"
+                   th:field="*{url}"/>
+          </div>
+        </div>
+        <div class="form-group required" th:classappend="${#fields.hasErrors('country')} ? 'has-error'">
+          <label for="select-country" class="col-sm-4 control-label" th:text="#{equatic.country}">Country
+            code</label>
+
+          <div class="col-sm-6">
+            <select id="select-country" class="form-control" th:field="*{country}">
+              <!--/*@thymesVar id="countries" type="java.util.List"*/-->
+              <!--/*@thymesVar id="country" type="be.ugent.equatic.domain.Country"*/-->
+              <option th:each="country : ${countries}" th:value="${country.code}" th:text="${country.name}">
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group" th:classappend="${#fields.hasErrors('idpEntityId')} ? 'has-error'">
+          <label for="input-idpEntityId" class="col-sm-4 control-label" th:text="#{equatic.idpEntityId}">Name in English</label>
+
+          <div class="col-sm-6">
+            <input type="text" class="form-control" id="input-idpEntityId" th:placeholder="#{equatic.idpEntityId}"
+                   th:field="*{idpEntityId}"/>
+          </div>
+        </div>
+        <div class="form-group" th:classappend="${#fields.hasErrors('idpMetadataUrl')} ? 'has-error'">
+          <label for="input-idpMetadataUrl" class="col-sm-4 control-label" th:text="#{equatic.idpMetadataUrl}">Country
+            code</label>
+
+          <div class="col-sm-6">
+            <input type="text" class="form-control" id="input-idpMetadataUrl"
+                   th:placeholder="#{equatic.idpMetadataUrl}" th:field="*{idpMetadataUrl}"/>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-sm-offset-4 col-sm-6">
+            <input id="submit-edit" type="submit" value="Create" th:value="#{equatic.save}" class="btn btn-success"/>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</body>
+</html>

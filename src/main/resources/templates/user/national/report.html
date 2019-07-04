@@ -1,0 +1,120 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      xmlns:dt="http://github.com/dandelion/datatables"
+      layout:decorator="layout">
+<head>
+  <title th:text="#{equatic.user.national.report.title}">
+    Title
+  </title>
+  <link rel="stylesheet" th:href="@{/css/select2.css}" href="../../../static/css/select2.css"/>
+  <script type="text/javascript" th:src="@{/js/select2.min.js}" src="../../../static/js/select2.min.js"></script>
+</head>
+<body>
+<div layout:fragment="title" th:text="#{equatic.user.national.report.title}">
+  Title
+</div>
+<div layout:fragment="container" class="container">
+  <!--/*@thymesVar id="options" type="be.ugent.equatic.web.util.NationalUserReportOptions"*/-->
+  <form method="get" th:object="${options}">
+    <!--/*@thymesVar id="institution" type="be.ugent.equatic.domain.Institution"*/-->
+    <input type="hidden" name="instId" th:value="${institution.id}"/>
+
+    <div th:if="${#fields.hasErrors('*')}" class="col-sm-offset-3 col-sm-6">
+      <div layout:include="formErrors :: formErrors(errors=${#fields.errors('*')})">
+        Form errors
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-5">
+        <div class="form-group"
+             th:classappend="${#fields.hasErrors('academicYearFrom') or #fields.hasErrors('academicYearTo')} ? 'has-error'">
+          <label for="select-academic-years" class="control-label" th:text="#{equatic.academicYears}">
+            Academic years
+          </label>
+
+          <div id="select-academic-years">
+            <!--/*@thymesVar id="allAcademicYears" type="java.util.List"*/-->
+            <!--/*@thymesVar id="year" type="be.ugent.equatic.domain.AcademicYear"*/-->
+            <span th:text="#{equatic.from}" class="capitalize">from</span>:
+            <select class="form-control display-inline-block width-auto" th:field="*{academicYearFrom}" title="from">
+              <option th:each="year : ${allAcademicYears}" th:value="${year.academicYear}"
+                      th:text="${year.academicYear}">
+              </option>
+            </select>
+
+            <span th:text="#{equatic.to}">to</span>:
+            <select class="form-control display-inline-block width-auto" th:field="*{academicYearTo}" title="to">
+              <option th:each="year : ${allAcademicYears}" th:value="${year.academicYear}"
+                      th:text="${year.academicYear}">
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group" th:classappend="${#fields.hasErrors('countryChosen')} ? 'has-error'">
+          <label for="select-country" class="control-label" th:text="#{equatic.country}">Country</label>
+
+          <select id="select-country" class="form-control" th:field="*{countryChosen}">
+            <!--/*@thymesVar id="countries" type="java.util.List"*/-->
+            <!--/*@thymesVar id="country" type="be.ugent.equatic.domain.Country"*/-->
+            <option value=""></option>
+            <option th:each="country : ${allCountries}" th:value="${country.code}" th:text="${country.name}">
+            </option>
+          </select>
+
+          <script th:inline="javascript">
+              $('#select-country').select2({
+                  placeholder: 'Select a country'
+              });
+          </script>
+        </div>
+
+        <div class="form-group">
+          <input id="generate" type="submit" value="Display" th:value="#{equatic.display}" class="btn btn-success"/>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div dt:conf="nationalUserReportTable">
+    <div dt:confType="export" dt:type="xls" dt:label="Export to XLS" dt:fileName="report"
+         dt:cssClass="btn btn-primary btn-sm button-xls-export"></div>
+  </div>
+
+  <!--/*@thymesVar id="institution" type="be.ugent.equatic.domain.Institution"*/-->
+  <table id="nationalUserReportTable" class="table" dt:table="true" dt:theme="bootstrap3" dt:export="xls"
+         th:with="fromCountry=${institution.country.code}, toCountry=${options.countryChosen?.code}">
+    <thead th:if="${toCountry}">
+    <tr>
+      <th th:text="#{equatic.user.national.institution(${toCountry})}" dt:sortInitDirection="asc">
+        Institution PL
+      </th>
+      <th th:text="#{equatic.user.national.institution(${fromCountry})}">Institution BE</th>
+      <th th:text="#{equatic.user.national.broadIsced}">Broad ISCED</th>
+      <th th:text="#{equatic.user.national.narrowIsced}">Narrow ISCED</th>
+      <th th:text="#{equatic.user.national.studentsOutgoing(${fromCountry},${toCountry})}">Students Outgoing</th>
+      <th th:text="#{equatic.user.national.studentsIncoming(${fromCountry},${toCountry})}">Students Incoming</th>
+      <th th:text="#{equatic.user.national.staffOutgoing(${fromCountry},${toCountry})}">Staff Outgoing</th>
+      <th th:text="#{equatic.user.national.staffIncoming(${fromCountry},${toCountry})}">Staff Incoming</th>
+      <th th:text="#{equatic.user.national.dataRange}">Data range</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="reportRow : ${reportRows}">
+      <!--/*@thymesVar id="reportRow" type="be.ugent.equatic.web.user.national.NationalUserReportRow"*/-->
+      <td th:text="${reportRow.institutionToDisplayName}">University of Warsaw</td>
+      <td th:text="${reportRow.institutionFromDisplayName}">Ghent University</td>
+      <td th:text="${reportRow.broadIsced}"></td>
+      <td th:text="${reportRow.narrowIsced}"></td>
+      <td th:text="${reportRow.outgoingStudents}"></td>
+      <td th:text="${reportRow.incomingStudents}"></td>
+      <td th:text="${reportRow.outgoingStaff}"></td>
+      <td th:text="${reportRow.incomingStaff}"></td>
+      <td th:text="${reportRow.dataRange}"></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

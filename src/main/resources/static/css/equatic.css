@@ -1,0 +1,85 @@
+.relative {
+    position: relative;
+}
+
+.message-top {
+    margin: 0 auto 20px;
+    max-width: 600px;
+}
+
+.center-text {
+    display: block !important;
+    text-align: center;
+}
+
+.display-inline-block {
+    display: inline-block;
+}
+
+.width-auto {
+    width: auto;
+}
+
+.capitalize {
+    text-transform: capitalize;
+}
+
+div.dataTables_info {
+    float: left;
+}
+
+div.dataTables_length {
+    float: left;
+}
+
+.dataTables_export {
+    margin-left: 10px;
+}
+
+ul.disc-indented {
+    list-style: disc;
+    margin-left: 20px;
+}
+
+.dataTables_wrapper {
+    margin-top: 10px;
+}
+
+td.padding-left {
+    padding-left: 10px;
+}
+
+.form-group.required .control-label:after {
+    content: "*";
+    color: red;
+}
+
+.margin-bottom {
+    margin-bottom: 20px;
+}
+
+.float-right {
+    float: right;
+}
+
+.footer {
+    text-align: center;
+}
+
+/* Fixes for eQuATIC website and Twitter Bootstrap integration. */
+
+/* Counteract Bootstrap a:hover, a:focus styles on navigation menu links */
+nav a:hover, nav a:focus {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+/* Institution's scores page */
+
+.students-count::before {
+    content: " (";
+}
+
+.students-count::after {
+    content: ")";
+}

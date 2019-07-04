@@ -1,0 +1,40 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      xmlns:dt="http://github.com/dandelion/datatables"
+      layout:decorator="layout">
+<head>
+  <title th:text="#{equatic.uploadErrors.title}">
+    Title
+  </title>
+</head>
+<body>
+<div layout:fragment="title" th:text="#{equatic.uploadErrors.title}">
+  Title
+</div>
+<div layout:fragment="container" class="container">
+  <div dt:conf="uploadErrorsTable">
+    <div dt:confType="export" dt:type="xls" dt:label="Export to XLS" dt:fileName="upload-errors"
+         dt:cssClass="btn btn-primary btn-sm button-xls-export"></div>
+  </div>
+
+  <table id="uploadErrorsTable" class="table" dt:table="true" dt:theme="bootstrap3" dt:export="xls">
+    <thead>
+    <tr>
+      <th th:text="#{equatic.columnTitle}">Column title</th>
+      <th th:text="#{equatic.rowNumber}" dt:sortInitDirection="asc">Row number</th>
+      <th th:text="#{equatic.cellValue}">Cell value</th>
+      <th th:text="#{equatic.errorDesc}">Error description</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="error : ${dataSheetUpload.errors}">
+      <td th:text="${error.column?.title}">What is your name?</td>
+      <td th:text="${error.rowNum}">3</td>
+      <td th:text="${error.cellValue}">Michal</td>
+      <td th:text="${error.errorDesc}">Name is not valid</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

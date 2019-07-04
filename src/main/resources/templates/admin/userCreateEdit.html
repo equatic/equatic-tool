@@ -1,0 +1,91 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+  <title th:text="#{equatic.admin.userCreateEdit.title}">
+    Title
+  </title>
+  <link rel="stylesheet" th:href="@{/css/typeaheadjs.css}" href="../../static/css/typeaheadjs.css"/>
+  <script type="text/javascript" th:src="@{/js/typeahead.bundle.js}" src="../../static/js/typeahead.bundle.js"></script>
+</head>
+<body>
+<div layout:fragment="title" th:text="#{equatic.admin.userCreateEdit.title}">
+  Title
+</div>
+<div layout:fragment="container" class="container">
+  <div class="row">
+    <div class="col-md-offset-2 col-md-8">
+      <form class="form-horizontal" th:object="${user}" method="post">
+        <!--/*@thymesVar id="create" type="boolean"*/-->
+        <!--/*@thymesVar id="_csrf" type="org.springframework.security.web.csrf.CsrfToken"*/-->
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <input type="hidden" th:name="instId" th:value="${institution?.id}"/>
+
+        <div th:if="${#fields.hasErrors('*')}" class="col-sm-offset-2 col-sm-8">
+          <div layout:include="formErrors :: formErrors(errors=${#fields.errors('*')})">
+            Form errors
+          </div>
+        </div>
+
+        <div class="form-group required" th:classappend="${#fields.hasErrors('institution')} ? 'has-error'">
+          <label for="select-inst" class="col-sm-4 control-label">Institution</label>
+
+          <div class="col-sm-6">
+            <div layout:include="institutionSelector :: institutionSelector(@{/admin/super/institutionsWoAdmins/ajax},institution)"
+                 th:if="${create}">
+              Institution selector
+            </div>
+
+            <select id="select-inst" class="form-control" name="institution" readonly="readonly" th:unless="${create}">
+              <option th:value="${institution.id}" th:text="${institution.displayName}" selected="selected"></option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group required" th:classappend="${#fields.hasErrors('username')} ? 'has-error'">
+          <label for="input-username" class="col-sm-4 control-label" th:text="#{equatic.username}">Username</label>
+
+          <div class="col-sm-6">
+            <input type="text" class="form-control" id="input-username" th:placeholder="#{equatic.username}"
+                   th:field="*{username}"/>
+          </div>
+        </div>
+        <div class="form-group required" th:classappend="${#fields.hasErrors('firstname')} ? 'has-error'">
+          <label for="input-firstname" class="col-sm-4 control-label" th:text="#{equatic.firstname}">First Name</label>
+
+          <div class="col-sm-6">
+            <input type="text" class="form-control" id="input-firstname" th:placeholder="#{equatic.firstname}"
+                   th:field="*{firstname}"/>
+          </div>
+        </div>
+        <div class="form-group required" th:classappend="${#fields.hasErrors('lastname')} ? 'has-error'">
+          <label for="input-lastname" class="col-sm-4 control-label" th:text="#{equatic.lastname}">Last Name</label>
+
+          <div class="col-sm-6">
+            <input type="text" class="form-control" id="input-lastname" th:placeholder="#{equatic.lastname}"
+                   th:field="*{lastname}"/>
+          </div>
+        </div>
+        <div class="form-group required" th:classappend="${#fields.hasErrors('email')} ? 'has-error'">
+          <label for="input-email" class="col-sm-4 control-label" th:text="#{equatic.email}">E-mail</label>
+
+          <div class="col-sm-6">
+            <input type="email" class="form-control" id="input-email" th:placeholder="#{equatic.email}"
+                   th:field="*{email}"/>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-sm-offset-4 col-sm-6">
+            <input id="submit-create" th:if="${create}" type="submit" value="Create" th:value="#{equatic.create}"
+                   class="btn btn-success"/>
+            <input id="submit-edit" th:unless="${create}" type="submit" value="Edit" th:value="#{equatic.edit}"
+                   class="btn btn-success"/>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</body>
+</html>

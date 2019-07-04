@@ -1,0 +1,10 @@
+<html xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="layout">
+<body>
+<div layout:fragment="container">
+  <div layout:include="message :: message(message=${userMessage})">
+    Message
+  </div>
+</div>
+</body>
+</html>

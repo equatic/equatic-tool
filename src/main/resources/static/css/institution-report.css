@@ -1,0 +1,218 @@
+@media screen {
+    .dont-screen {
+        display: none;
+    }
+}
+
+#controlbar {
+    margin-top: 50px;
+}
+
+#controlbar .row {
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+}
+
+#controlbar .col-md-4,
+#controlbar .col-sm-4,
+#controlbar .col-md-12 {
+    padding: 0 !important;
+}
+
+#controlbar .control1 {
+    border-top-left-radius: 5px;
+    border-right: none !important;
+}
+
+#controlbar .control2 {
+    border-left: solid 1px #d1d1d1;
+    border-right: solid 1px #d1d1d1;
+}
+
+#controlbar .control3 {
+    border-top-right-radius: 5px;
+    border-left: none !important;
+}
+
+#controlbar .control4 {
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-left: solid 1px #d1d1d1;
+    border-right: solid 1px #d1d1d1;
+    border-top: none !important;
+}
+
+.controlwrapper {
+    display: flex;
+    align-items: center;
+}
+
+#controlbar .controlwrapper {
+    padding: 15px;
+    background-color: #ffffff;
+    border: solid 1px #d1d1d1;
+    color: #34485F;
+}
+
+#controlbar .linktopdf {
+    color: #34485F;
+    font-weight: bold;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    display: block;
+    width: 200px;
+}
+
+#controlbar .linktopdf img {
+    padding-right: 10px;
+}
+
+#controlbar .linktopdf:hover {
+    text-decoration: none;
+}
+
+#controlbar .linktopdf:focus {
+    text-decoration: none;
+}
+
+.indicator h1 {
+    color: #397D9B;
+    font-weight: bold;
+    margin-bottom: 20px;
+    margin-top: 30px;
+    font-size: 24px;
+}
+
+.indicator p {
+    margin: 0px !important;
+}
+
+/* - - - - - - - - - - - -- - - - - - - - - - - - */
+/* - - - - - - - - TABLE LAYOUT - - - - - - - - - */
+/* - - - - - - - - - - - -- - - - - - - - - - - - */
+
+.tbl-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-color: #ffffff;
+    margin-bottom: 20px;
+    border: 1px solid #d1d1d1;
+    border-radius: 5px;
+}
+
+.tbl-container-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.tbl-row {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.tbl-cell {
+    display: block;
+}
+
+.tbl-cell.data {
+    padding: 15px;
+    width: 100%;
+    border-bottom: 1px solid #d1d1d1;
+}
+
+.tbl-row:last-child > .tbl-cell.data {
+    border-bottom: none;
+}
+
+.width40 {
+    width: 40%;
+}
+
+.width60 {
+    width: 60%;
+}
+
+.tbl-cell.gauge {
+    border-right: 1px solid #d1d1d1;
+    padding: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.spancols {
+    border-top: 1px solid #d1d1d1;
+    padding: 15px;
+}
+
+.singleitem {
+    height: 100px;
+}
+
+/* - - - - - - - - - - - -- - - - - - - - - - - - */
+/* - - - - - - - - - THE GAUGES - - - - - - - - - */
+/* - - - - - - - - - - - -- - - - - - - - - - - - */
+
+.gauge {
+    font-size: 1.2em;
+}
+
+.gauge-default {
+    margin-right: 25px;
+}
+
+@media (max-width: 1200px) {
+    #controlbar .controlwrapper .infowrap {
+        width: 100%;
+        padding-left: 0px !important;
+    }
+
+}
+
+@media (min-width: 768px) and (max-width: 1200px) {
+    .controlwrapper .infowrap {
+        min-height: 76px;
+        display: flex;
+        align-items: center;
+    }
+}
+
+@media (max-width: 767px) {
+    #controlbar .controlgauge {
+        display: inline-block !important;
+        margin: 0 auto;
+    }
+
+    #controlbar .control1 {
+        border-top-right-radius: 5px;
+        border-bottom-left-radius: 0px;
+        border-right: 1px solid #d1d1d1 !important;
+        border-bottom: none !important;
+    }
+
+    #controlbar .control3 {
+        border-top-right-radius: 0px;
+        border-bottom-left-radius: 5px;
+        border-left: 1px solid #d1d1d1 !important;
+        border-top: none !important;
+    }
+
+    #controlbar .infowrap {
+        padding-left: 15px !important;
+    }
+
+    .infotextstudent {
+        padding-left: 0px !important;
+    }
+}
+
+@media (max-width: 425px) {
+    #controlbar .infowrap {
+        padding-left: 0px !important;
+        width: 100%;
+    }
+}

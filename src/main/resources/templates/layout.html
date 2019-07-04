@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head>
+  <title>eQuATIC</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link rel="stylesheet" id="ubuntu-css" href="https://fonts.googleapis.com/css?family=Ubuntu:300,700" type="text/css"
+        media="all"/>
+  <link rel="stylesheet" th:href="@{/css/style.css}" href="../static/css/style.css"/>
+  <link rel="stylesheet" th:href="@{/css/bootstrap.css}" href="../static/css/bootstrap.css"/>
+  <link rel="stylesheet" th:href="@{/css/equatic.css}" href="../static/css/equatic.css"/>
+  <script type="text/javascript" th:src="@{/js/jquery.min.js}" src="../static/js/jquery.min.js"></script>
+  <script type="text/javascript" th:src="@{/js/bootstrap.min.js}" src="../static/js/bootstrap.min.js"></script>
+  <script type="text/javascript" th:src="@{/js/bootstrap-init.js}" src="../static/js/bootstrap-init.js"></script>
+  <script type="text/javascript" th:src="@{/js/modernizr.js}" src="../static/js/modernizr.js"></script>
+  <script type="text/javascript" th:src="@{/js/main.js}" src="../static/js/main.js"></script>
+  <script type="text/javascript" th:src="@{/js/equatic.js}" src="../static/js/equatic.js"></script>
+</head>
+<body>
+<nav id="responsive-menu">
+  <a href="#" class="menu-button resp-menu-button"></a>
+
+  <ul layout:replace="menu :: menu('responsive-menu')">
+    Menu
+  </ul>
+</nav>
+
+<div id="page">
+  <nav class="navbar navbar-default">
+    <div class="container">
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown" th:if="${#authorization.expression('isAuthenticated()')}">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+            <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+            <span id="username" th:text="${#authentication.name}"></span>
+            <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu" role="menu">
+            <li>
+              <form th:action="@{/account/logout}" method="post">
+                <button class="btn btn-link" role="link" th:text="#{equatic.signout}">Sign out</button>
+              </form>
+            </li>
+          </ul>
+        </li>
+        <li th:unless="${#authorization.expression('isAuthenticated()')}">
+          <a href="#" th:href="@{/account/login}" th:text="#{equatic.signin}">Sign in</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <header id="masthead" role="banner">
+    <div class="container relative">
+      <a href="http://www.equatic.ugent.be">
+        <img th:src="@{/images/logo.svg}" src="../static/images/logo.svg" width="230" height="72"/>
+      </a>
+      <nav role="navigation" th:if="${#authorization.expression('isAuthenticated()')}">
+        <ul layout:replace="menu :: menu('nav-menu')">
+          Menu
+        </ul>
+
+        <a class="menu-button main-menu-button" href="#" th:text="#{equatic.menu}">Menu</a>
+      </nav>
+    </div>
+
+    <div id="page-title">
+      <div layout:fragment="title" class="container">
+        Title
+      </div>
+    </div>
+  </header>
+
+  <div id="main">
+    <div layout:fragment="container">
+      Container
+    </div>
+  </div>
+
+  <div class="footer"><span class="text-muted">© Copyright @project.inceptionYear@ @project.name@ v@project.version@</span></div>
+</div>
+</body>
+</html>
