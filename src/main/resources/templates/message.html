@@ -1,0 +1,9 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<body layout:fragment="message(message)">
+<p th:if="${message}" th:text="${message.text}" class="alert message-top center-text"
+   th:classappend="'alert-' + ${message.type}">
+  Message
+</p>
+</body>
+</html>

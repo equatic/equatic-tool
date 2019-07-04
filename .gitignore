@@ -1,0 +1,15 @@
+# No Eclipse internal files
+.settings
+.classpath
+.project
+
+# No IntelliJ internal files
+.idea
+**.iml
+atlassian-ide-plugin.xml
+
+# No buildable files
+target/
+
+# No application property files from main/resources as they can contain secrets
+src/main/resources/application-*.properties

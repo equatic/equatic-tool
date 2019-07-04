@@ -1,0 +1,50 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      xmlns:dt="http://github.com/dandelion/datatables"
+      layout:decorator="layout">
+<head>
+  <title th:text="#{equatic.uploads.title}">
+    Title
+  </title>
+</head>
+<body>
+<div layout:fragment="title" th:text="#{equatic.uploads.title}">
+  Title
+</div>
+<div layout:fragment="container" class="container" th:with="df=#{equatic.datetime.format}">
+  <div dt:conf="uploadsTable">
+    <div dt:confType="export" dt:type="xls" dt:label="Export to XLS" dt:fileName="uploads"
+         dt:cssClass="btn btn-primary btn-sm button-xls-export"></div>
+  </div>
+
+  <table id="uploadsTable" class="table" dt:table="true" dt:theme="bootstrap3" dt:export="xls">
+    <thead>
+    <tr>
+      <th th:text="#{equatic.uploadDate}" dt:sortInitDirection="desc">Upload date</th>
+      <th th:text="#{equatic.adminUsername}">Admin username</th>
+      <th th:text="#{equatic.firstname}">First name</th>
+      <th th:text="#{equatic.lastname}">Last name</th>
+      <th th:text="#{equatic.dataSheetCode}">Data sheet code</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="upload : ${uploads}" th:with="uploadDate=${upload.uploadDate}">
+      <td th:text="${#calendars.format(uploadDate,df)}">11/02/2015 19:33:43</td>
+      <td th:text="${upload.user.username}">Paul.Leys@UGent.be</td>
+      <td th:text="${upload.user.firstname}">Paul</td>
+      <td th:text="${upload.user.lastname}">Leys</td>
+      <td th:text="${upload.dataSheet.code}">SMP</td>
+      <td>
+        <a href="#" th:text="#{equatic.viewErrors}" class="btn btn-primary btn-xs" role="button"
+           th:href="@{errors/{uploadId}(instId=${institution?.id},uploadId=${upload.id})}"
+           th:unless="${#lists.isEmpty(upload.errors)}">
+          View errors
+        </a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

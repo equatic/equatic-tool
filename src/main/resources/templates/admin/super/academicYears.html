@@ -1,0 +1,39 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      xmlns:dt="http://github.com/dandelion/datatables"
+      layout:decorator="layout">
+<head>
+  <title th:text="#{equatic.admin.super.academicYears.title}">
+    Title
+  </title>
+</head>
+<body>
+<div layout:fragment="title" th:text="#{equatic.admin.super.academicYears.title}">
+  Title
+</div>
+<div layout:fragment="container" class="container">
+  <div layout:include="message :: message(message=${message})">
+    Message
+  </div>
+
+  <form th:action="@{/admin/super/academicYears/createNext}" method="post">
+    <input type="submit" class="btn btn-success" th:value="#{equatic.admin.super.academicYears.createNext}"></input>
+  </form>
+
+  <table id="uploadsTable" class="table" dt:table="true" dt:theme="bootstrap3">
+    <thead>
+    <tr>
+      <th th:text="#{equatic.academicYear}" dt:sortInitDirection="desc">Academic year</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!--/*@thymesVar id="academicYears" type="java.util.List"*/-->
+    <tr th:each="academicYear : ${academicYears}">
+      <!--/*@thymesVar id="academicYear" type="be.ugent.equatic.domain.AcademicYear"*/-->
+      <td th:text="${academicYear.academicYear}">2017-2018</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

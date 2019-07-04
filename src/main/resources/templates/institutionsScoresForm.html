@@ -1,0 +1,151 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<body layout:fragment="institutionsScoresForm(url,options,institution,allIndicatorCodes,allAcademicYears,
+  allPartnerInstitutions,allBroadIsceds,multipleInstitutions,modeEnabled,institutionsFilterEnabled)">
+<!--/*@thymesVar id="options" type="be.ugent.equatic.web.util.InstitutionsScoresOptions"*/-->
+<form th:action="${url}" method="post" th:object="${options}">
+  <!--/*@thymesVar id="institution" type="be.ugent.equatic.domain.Institution"*/-->
+  <input type="hidden" name="instId" th:value="${institution.id}"/>
+
+  <div th:if="${#fields.hasErrors('*')}" class="col-sm-offset-3 col-sm-6">
+    <div layout:include="formErrors :: formErrors(errors=${#fields.errors('*')})">
+      Form errors
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label for="select-indicator-codes" class="control-label" th:text="#{equatic.indicators}">Indicators</label>
+
+        <select id="select-indicator-codes" class="form-control" th:field="*{indicatorCodes}" multiple="multiple">
+          <!--/*@thymesVar id="allIndicatorCodes" type="java.util.List"*/-->
+          <!--/*@thymesVar id="indicatorCode" type="be.ugent.equatic.indicator.IndicatorCode"*/-->
+          <option th:each="indicatorCode : ${allIndicatorCodes}" th:value="${indicatorCode}"
+                  th:text="${indicatorCode.indicator.name}">
+          </option>
+        </select>
+
+        <script th:inline="javascript">
+            $('#select-indicator-codes').select2();
+        </script>
+      </div>
+
+      <div class="form-group"
+           th:classappend="${#fields.hasErrors('academicYearFrom') or #fields.hasErrors('academicYearTo')} ? 'has-error'">
+        <label for="select-academic-years" class="control-label" th:text="#{equatic.academicYears}">
+          Academic years
+        </label>
+
+        <div id="select-academic-years">
+          <!--/*@thymesVar id="allAcademicYears" type="java.util.List"*/-->
+          <!--/*@thymesVar id="year" type="be.ugent.equatic.domain.AcademicYear"*/-->
+          <span th:text="#{equatic.from}" class="capitalize">from</span>:
+          <select class="form-control display-inline-block width-auto" th:field="*{academicYearFrom}" title="from">
+            <option th:each="year : ${allAcademicYears}" th:value="${year.academicYear}"
+                    th:text="${year.academicYear}">
+            </option>
+          </select>
+
+          <span th:text="#{equatic.to}">to</span>:
+          <select class="form-control display-inline-block width-auto" th:field="*{academicYearTo}" title="to">
+            <option th:each="year : ${allAcademicYears}" th:value="${year.academicYear}"
+                    th:text="${year.academicYear}">
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <!--/*@thymesVar id="institutionsFilterEnabled" type="java.lang.Boolean"*/-->
+      <!--/*@thymesVar id="multipleInstitutions" type="java.lang.Boolean"*/-->
+      <div class="form-group" th:classappend="${#fields.hasErrors('institutions')} ? 'has-error'"
+           th:if="${institutionsFilterEnabled}">
+        <label for="select-institutions" class="control-label" th:text="#{equatic.institutions}">Institutions</label>
+
+        <select id="select-institutions" class="form-control" th:field="*{institutions}"
+                th:attr="multiple=${multipleInstitutions ? 'multiple' : null}">
+          <!--/*@thymesVar id="allPartnerInstitutions" type="java.util.List"*/-->
+          <!--/*@thymesVar id="partnerInstitution" type="be.ugent.equatic.domain.Institution"*/-->
+          <option th:if="${!multipleInstitutions}" value=""></option>
+          <option th:each="partnerInstitution : ${allPartnerInstitutions}" th:value="${partnerInstitution.id}"
+                  th:text="${partnerInstitution.displayName} + ' (' + ${partnerInstitution.country.name} + ')'">
+          </option>
+        </select>
+
+        <script th:inline="javascript">
+            $('#select-institutions').select2({
+                placeholder: 'Select an institution'
+            });
+        </script>
+      </div>
+
+      <!--/*@thymesVar id="modeEnabled" type="java.lang.Boolean"*/-->
+      <div class="form-group" th:if="${modeEnabled}">
+        <label for="select-mode" class="control-label" th:text="#{equatic.mode}">Display mode</label>
+
+        <div class="row">
+          <div class="col-md-7">
+            <select id="select-mode" class="form-control" th:field="*{mode}">
+              <!--/*@thymesVar id="allModes" type="java.util.List"*/-->
+              <!--/*@thymesVar id="mode" type="be.ugent.equatic.web.util.InstitutionsScoresMode"*/-->
+              <option th:each="mode : ${allModes}" th:value="${mode}" th:text="${mode.name}">
+              </option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <input name="display" type="submit" value="Display" th:value="#{equatic.display}" class="btn btn-success"/>
+          </div>
+          <div class="col-md-3">
+            <input name="export" type="submit" value="Export to XLS" class="btn btn-primary"/>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group" th:unless="${modeEnabled}">
+        <input name="display" type="submit" value="Display" th:value="#{equatic.display}" class="btn btn-success"/>
+      </div>
+    </div>
+
+    <div class="form-group col-md-6">
+      <label for="select-isceds" class="control-label" th:text="#{equatic.isced}">ISCED</label>
+
+      <ul id="select-isceds">
+        <li>
+          <input type="checkbox" id="checkbox-select-all-isceds"/>
+          <label for="checkbox-select-all-isceds" th:text="#{equatic.isceds.selectAll}">
+            Select all ISCED codes
+          </label>
+        </li>
+
+        <!--/*@thymesVar id="allBroadIsceds" type="java.util.Map"*/-->
+        <!--/*@thymesVar id="isced" type="be.ugent.equatic.domain.Isced"*/-->
+        <!--suppress ThymeleafVariablesResolveInspection -->
+        <li th:each="broadIsced : ${allBroadIsceds}" th:with="isced=${broadIsced.value.isced}" class="broad-isced"
+            data-expanded="no">
+          <span class="glyphicon expand btn-xs" aria-hidden="true"></span>
+          <!--suppress HtmlFormInputWithoutLabel -->
+          <input type="checkbox" th:field="*{isceds}" th:value="${isced.code}"
+                 class="checkbox-broad-isced checkbox-isced"/>
+          <label th:for="${#ids.prev('isceds')}" th:text="${isced.code} + ': ' + ${isced.fieldName}">
+            Isced
+          </label>
+
+          <ul class="narrow-isceds">
+            <!--/*@thymesVar id="narrowIsced" type="be.ugent.equatic.domain.Isced"*/-->
+            <!--suppress ThymeleafVariablesResolveInspection -->
+            <li th:each="narrowIsced : ${broadIsced.value.narrowIsceds}">
+              <!--suppress HtmlFormInputWithoutLabel -->
+              <input type="checkbox" th:field="*{isceds}" th:value="${narrowIsced.code}"
+                     class="checkbox-narrow-isced checkbox-isced"/>
+              <label th:for="${#ids.prev('isceds')}" th:text="${narrowIsced.code} + ': ' + ${narrowIsced.fieldName}">
+                Isced
+              </label>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</form>
+</body>
+</html>

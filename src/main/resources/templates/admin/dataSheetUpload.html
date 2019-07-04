@@ -1,0 +1,52 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+  <title th:text="#{equatic.admin.dataSheetUpload.title}">
+    Title
+  </title>
+  <link rel="stylesheet" th:href="@{/css/file-upload.css}"/>
+  <script type="text/javascript" th:src="@{/js/file-upload.js}"></script>
+</head>
+<body>
+<div layout:fragment="title" th:text="#{equatic.admin.dataSheetUpload.title}">
+  Title
+</div>
+<div layout:fragment="container" class="container">
+  <div layout:include="message :: message(message=${message})">
+    Message
+  </div>
+
+  <div class="row">
+    <div class="col-md-7">
+      <div layout:include="yearSelectionForm :: yearSelectionForm
+      (academicYear=${academicYear},academicYears=${academicYears},institution=${institution})">
+        Year selection form
+      </div>
+    </div>
+    <div class="col-md-5">
+      <!--/*@thymesVar id="upload" type="be.ugent.equatic.domain.DataSheetUpload"*/-->
+      <a th:href="@{dataSheetUpload/errors/{uploadId}(instId=${institution?.id},uploadId=${upload.id})}"
+         class="btn btn-primary btn-sm float-right" role="button" th:if="${upload}"
+         th:text="#{equatic.showUploadErrors}">
+        Show upload errors
+      </a>
+      <a th:href="@{dataSheetUpload/uploads(instId=${institution?.id})}"
+         class="btn btn-primary btn-sm float-right" role="button" th:unless="${upload}"
+         th:text="#{equatic.showUploadsList}">
+        Show uploads list
+      </a>
+    </div>
+  </div>
+
+  <!--/*@thymesVar id="dataSheetCodes" type="DataSheetCode[]"*/-->
+  <div th:each="dataSheetCode : ${dataSheetCodes}">
+    <div class="row">
+      <div layout:include="admin/dataSheetRow :: dataSheetRow(${dataSheetCode},${institution},${academicYear})">
+        Data sheet row
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

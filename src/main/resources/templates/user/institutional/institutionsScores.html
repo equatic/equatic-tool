@@ -1,0 +1,78 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      xmlns:dt="http://github.com/dandelion/datatables"
+      layout:decorator="layout">
+<head>
+  <title th:text="#{equatic.institutionsScores.title}">
+    Title
+  </title>
+  <link rel="stylesheet" th:href="@{/css/select2.css}" href="../../../static/css/select2.css"/>
+  <link rel="stylesheet" th:href="@{/css/isceds.css}" href="../../../static/css/isceds.css"/>
+  <script type="text/javascript" th:src="@{/js/select2.min.js}" src="../../../static/js/select2.min.js"></script>
+  <script type="text/javascript" th:src="@{/js/isceds.js}" src="../../../static/js/isceds.js"></script>
+</head>
+<body>
+<div layout:fragment="title" th:text="#{equatic.institutionsScores.title}">
+  Title
+</div>
+<div layout:fragment="container" class="container">
+  <div layout:include="institutionsScoresForm :: institutionsScoresForm(
+    @{/user/{type}/institutionsScores(type=${type})},
+    ${options},${institution},${allIndicatorCodes},${allAcademicYears},${allPartnerInstitutions},${allBroadIsceds},
+    true,true,${institutionsScoresMap != null})">
+    Institutions scores form
+  </div>
+
+  <!--/*@thymesVar id="options" type="be.ugent.equatic.web.util.InstitutionsScoresOptions"*/-->
+  <!--/*@thymesVar id="mode" type="be.ugent.equatic.web.util.InstitutionsScoresMode"*/-->
+  <!--/*@thymesVar id="institutionsScoresMap" type="java.util.Map"*/-->
+  <!--/*@thymesVar id="countriesScoresMap" type="java.util.Map"*/-->
+  <table id="institutionsScoresTable" class="table" dt:table="true" dt:theme="bootstrap3"
+         th:with="scoresMap = ${institutionsScoresMap} ? ${institutionsScoresMap} : ${countriesScoresMap}">
+    <thead>
+    <tr>
+      <th th:text="#{equatic.institution}" th:if="${institutionsScoresMap}">Institution</th>
+      <th th:text="#{equatic.country}" dt:sortInitDirection="asc">Country</th>
+      <th th:each="indicatorCode : ${options.indicatorCodes}"
+          th:if="${mode == T(be.ugent.equatic.web.util.InstitutionsScoresMode).DETAILED}">
+        <span th:text="${indicatorCode.indicator.name}">Indicator</span>
+        <span th:title="${indicatorCode.indicator.description}" class="glyphicon glyphicon-info-sign"></span>
+      </th>
+      <th th:each="clusterCode : ${allClusterCodes}" th:text="${clusterCode.cluster.name}"
+          th:if="${mode == T(be.ugent.equatic.web.util.InstitutionsScoresMode).CLUSTERS}">
+        Cluster
+      </th>
+      <th th:if="${mode == T(be.ugent.equatic.web.util.InstitutionsScoresMode).CLUSTERS}"
+          th:text="#{equatic.overallScore}">
+        Overall score
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="scoresEntry : ${scoresMap}"
+        th:with="country = ${institutionsScoresMap} ? ${scoresEntry.key.country} : ${scoresEntry.key}">
+      <!--suppress ThymeleafVariablesResolveInspection -->
+      <td th:text="${scoresEntry.key.displayName}" th:if="${institutionsScoresMap}">Ghent University</td>
+      <!--suppress ThymeleafVariablesResolveInspection -->
+      <td th:text="${country.name}">Belgium</td>
+      <!--suppress ThymeleafVariablesResolveInspection -->
+      <td th:each="score : ${scoresEntry.value}">
+        <!--/*@thymesVar id="score" type="be.ugent.equatic.indicator.Score"*/-->
+        <div th:if="${score}">
+          <span th:text="${#numbers.formatDecimal(score.value, 1, 2, 'POINT')}">
+            10.0
+          </span><sup aria-hidden="true" data-toggle="tooltip" data-placement="top"
+                      th:title="#{equatic.user.institutional.tip(${score.standardError})}"
+                      title="Number of students taken into account. Standard error: 1."
+                      th:if="${score.studentsCount}"><span th:text="${score.studentsCount}" class="students-count">
+            5
+          </span></sup>
+        </div>
+        <span th:unless="${score}"></span>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

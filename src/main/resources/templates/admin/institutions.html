@@ -1,0 +1,93 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      xmlns:dt="http://github.com/dandelion/datatables"
+      layout:decorator="layout">
+<head>
+  <title th:text="#{equatic.admin.institutions.title}">
+    Title
+  </title>
+  <link rel="stylesheet" th:href="@{/css/file-upload.css}"/>
+  <script type="text/javascript" th:src="@{/js/file-upload.js}"></script>
+  <script th:inline="javascript">
+      function renderName(data, type, full) {
+          return '<span class="name">' + data + '</span>';
+      }
+
+      function renderActions(data, type, full) {
+          var link = /*[[@{/admin/super/institution}]]*/ 'link';
+          return '<a class="btn btn-primary btn-sm" role="button" name="button-edit" href="' + link + '/' + full.id + '/edit">'
+              + '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>'
+              + '<a class="btn btn-danger btn-sm" role="button" name="button-delete" href="' + link + '/' + full.id + '/delete">'
+              + '<span class="glyphicon glyphicon-minus" aria-hidden="true"></span></a>';
+      }
+
+      function renderWithFederatedIdP(data, type, full) {
+          var withFederatedIdP = full.withFederatedIdP;
+          var yes = /*[[#{equatic.yes}]]*/ 'yes';
+          var no = /*[[#{equatic.no}]]*/ 'no';
+          var text = withFederatedIdP ? yes : no;
+          var elemClass = withFederatedIdP ? 'text-success' : 'text-danger';
+          return '<strong><span class="' + elemClass + '">' + text + '</span></strong>';
+      }
+  </script>
+</head>
+<body>
+<div layout:fragment="title" th:text="#{equatic.admin.institutions.title}">
+  Title
+</div>
+<div layout:fragment="container" class="container">
+  <div layout:include="message :: message(message=${message})">
+    Message
+  </div>
+
+  <div class="row">
+    <div class="col-md-8">
+      <form th:action="@{/admin/super/institutions}" method="post" enctype="multipart/form-data" class="form-inline">
+        <h5 th:text="#{equatic.admin.super.uploadInstitutionsXls}">Upload</h5>
+
+        <div layout:include="fileUpload :: fileUpload"></div>
+      </form>
+    </div>
+    <div class="col-md-4">
+      <!--/*@thymesVar id="upload" type="pl.edu.usos.equatic.domain.DataSheetUpload"*/-->
+      <a th:href="@{/admin/super/institutions/errors/{uploadId}(uploadId=${upload.id})}"
+         class="btn btn-primary btn-sm float-right" role="button" th:if="${upload}"
+         th:text="#{equatic.showUploadErrors}">
+        Show upload errors
+      </a>
+      <a th:href="@{/admin/super/institutions/uploads}"
+         class="btn btn-primary btn-sm float-right" role="button" th:unless="${upload}"
+         th:text="#{equatic.showUploadsList}">
+        Show uploads list
+      </a>
+    </div>
+  </div>
+
+  <div dt:conf="institutionsTable">
+    <div dt:confType="export" dt:type="xls" dt:label="Export to XLS" dt:url="@{/admin/super/institutions/export/xls}"
+         dt:cssClass="btn btn-primary btn-sm button-xls-export"></div>
+  </div>
+
+  <table id="institutionsTable" class="table" dt:table="true" dt:theme="bootstrap3" dt:export="xls"
+         dt:url="@{/admin/super/institutions/ajax}" dt:serverside="true">
+    <thead>
+    <tr>
+      <th dt:property="pic" th:text="#{equatic.pic}">PIC</th>
+      <th dt:property="erasmusCode" th:text="#{equatic.erasmusCode}">Erasmus code</th>
+      <th dt:property="name" dt:renderFunction="renderName" th:text="#{equatic.name}" dt:sortInitDirection="asc">
+        Name
+      </th>
+      <th dt:property="nameEn" th:text="#{equatic.nameEn}">Name in English</th>
+      <th dt:property="url" th:text="#{equatic.url}">URL</th>
+      <th dt:property="country.name" th:text="#{equatic.country}">Country</th>
+      <th dt:property="idpEntityId" dt:renderFunction="renderWithFederatedIdP" th:text="#{equatic.withFederatedIdP}"
+          dt:filterable="false" dt:searchable="false">
+        Federated
+      </th>
+      <th dt:renderFunction="renderActions" dt:filterable="false" dt:searchable="false" dt:sortable="false"></th>
+    </tr>
+    </thead>
+  </table>
+</div>
+</body>
+</html>

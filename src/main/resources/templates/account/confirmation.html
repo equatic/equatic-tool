@@ -1,0 +1,19 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+  <title th:text="#{equatic.account.confirmation.title}">
+    Title
+  </title>
+</head>
+<body>
+<div layout:fragment="title" th:text="#{equatic.account.confirmation.title}">
+  Title
+</div>
+<div layout:fragment="container" class="container">
+  <div layout:include="message :: message(message=${message})">
+    Message
+  </div>
+</div>
+</body>
+</html>

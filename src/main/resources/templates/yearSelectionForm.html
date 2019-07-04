@@ -1,0 +1,18 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<body layout:fragment="yearSelectionForm(academicYear,academicYears,institution)">
+<form class="form-inline margin-bottom" method="get">
+  <input type="hidden" name="instId" th:value="${institution.id}" th:if="${institution}"/>
+
+  <div class="form-group">
+    <label for="select-year" class="control-label">Academic year</label>
+
+    <select id="select-year" class="form-control submit-on-change" name="year">
+      <option th:each="year : ${academicYears}" th:selected="${year} eq ${academicYear}"
+              th:value="${year.academicYear}" th:text="${year.academicYear}">
+      </option>
+    </select>
+  </div>
+</form>
+</body>
+</html>

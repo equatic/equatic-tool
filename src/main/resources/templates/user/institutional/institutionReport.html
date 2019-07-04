@@ -1,0 +1,133 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+  <title th:text="#{equatic.user.institutional.institutionReport.title}">
+    Title
+  </title>
+  <link rel="stylesheet" th:href="@{/css/select2.css}" href="../../../static/css/select2.css"/>
+  <link rel="stylesheet" th:href="@{/css/isceds.css}" href="../../../static/css/isceds.css"/>
+  <link rel="stylesheet" th:href="@{/css/institution-report.css}" href="../../../static/css/institution-report.css"/>
+  <link rel="stylesheet" th:href="@{/css/institution-report-print.css}"
+        href="../../../static/css/institution-report-print.css"/>
+  <script type="text/javascript" th:src="@{/js/select2.min.js}" src="../../../static/js/select2.min.js"></script>
+  <script type="text/javascript" th:src="@{/js/isceds.js}" src="../../../static/js/isceds.js"></script>
+  <script type="text/javascript" th:src="@{/js/NumberGauge.custom.min.js}"
+          src="../../../static/js/NumberGauge.custom.min.js"></script>
+  <script type="text/javascript" th:src="@{/js/NumberGauge.min.js}"
+          src="../../../static/js/NumberGauge.min.js"></script>
+</head>
+<body>
+<div layout:fragment="title" th:text="#{equatic.user.institutional.institutionReport.title}">
+  Title
+</div>
+<div layout:fragment="container" class="container">
+  <!--/*@thymesVar id="institutionSelected" type="be.ugent.equatic.domain.Institution"*/-->
+  <div class="row dont-screen" th:if="${institutionSelected}">
+    <div class="col-sm-4">
+      <img th:src="@{/images/logo.svg}" src="../../../static/images/logo.svg" width="90" height="28"/>
+    </div>
+    <div class="col-sm-8">
+      <span th:text="${institutionSelected.displayName}"></span>
+    </div>
+  </div>
+
+  <div layout:include="institutionsScoresForm :: institutionsScoresForm(@{/user/institutional/institutionReport},
+    ${options},${institution},${allIndicatorCodes},${allAcademicYears},${allPartnerInstitutions},${allBroadIsceds},
+    false,false,true)">
+    Institutions scores form
+  </div>
+
+  <!--/*@thymesVar id="institutionScores" type="java.util.List"*/-->
+  <div th:if="${institutionScores}">
+    <section id="controlbar">
+      <div class="container">
+        <div layout:include="scoreGauges :: scoreGauges" class="row">
+          Score gauges
+        </div>
+        <div class="row dont-print">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <a href="#" class="linktopdf" onclick="window.print()">
+              <img th:src="@{/images/pdf-icon.svg}" src="../../../static/images/pdf-icon.svg" width="35" height="40"
+                   alt="download pdf"></img>
+              Download PDF version
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!--/*@thymesVar id="explanations" type="be.ugent.equatic.indicator.Explanation[]"*/-->
+    <!--/*@thymesVar id="options" type="be.ugent.equatic.web.util.InstitutionsScoresOptions"*/-->
+    <section th:each="score,status : ${institutionScores}" class="indicator" th:if="${score}"
+             th:with="explanation=${explanations[status.index]},indicatorCode=${options.indicatorCodes[status.index]}"
+             th:classappend="${explanation?.shortInfos == null ? 'fieldoftwo' : ''}">
+      <!--/*@thymesVar id="score" type="be.ugent.equatic.indicator.Score"*/-->
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <h1 th:text="${indicatorCode.indicator.name}"></h1>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-5 col-sm-6 col-xs-12">
+            <!--/*@thymesVar id="hasReferenceGroupAtBottom" type="java.lang.Boolean"*/-->
+            <div class="tbl-container"
+                 th:with="hasReferenceGroupAtBottom=${explanation != null and explanation.showReferenceGroup and explanation.shortInfos != null}">
+              <div class="tbl-row">
+                <div class="tbl-cell gauge width40"
+                     th:classappend="${!hasReferenceGroupAtBottom ? 'rounded-bottomleft' : ''}">
+                  <div class="gauge gaugeperform"
+                       th:attr="data-value=${score.value},data-indicator=${indicatorCode},data-standard-error=${score.standardError}"></div>
+                </div>
+                <div class="tbl-cell width60" th:if="${explanation}">
+                  <div class="tbl-container-inner">
+                    <div class="tbl-row" th:if="${explanation.shortInfos}"
+                         th:each="shortInfo, iterStat : ${explanation.shortInfos}">
+                      <div class="tbl-cell data"
+                           th:classappend="${iterStat.last and !hasReferenceGroupAtBottom ? 'rounded-bottomright' : ''}">
+                        <p th:utext="${shortInfo}">
+                          Short info
+                        </p>
+                      </div>
+                    </div>
+                    <div class="tbl-row singleitem" th:unless="${explanation.shortInfos}">
+                      <div layout:include="user/institutional/referenceGroup :: referenceGroup(${score.studentsCount})"
+                           class="tbl-cell data rounded-bottomright">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="tbl-row spancols referencegroup" th:if="${hasReferenceGroupAtBottom}">
+                <div layout:include="user/institutional/referenceGroup :: referenceGroup(${score.studentsCount})"
+                     class="tbl-cell">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-7 col-sm-6 col-xs-12">
+            <!--/*@thymesVar id="paragraph" type="java.lang.String"*/-->
+            <p th:each="paragraph : ${explanation?.paragraphs}" th:utext="${paragraph}" class="infotextstudent">
+              Explanation
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <script th:inline="javascript">
+          $(function () {
+              var indicatorCode = /*[[${indicatorCode.name}]]*/ "INDICATOR_CODE";
+              var fairScoreMin = /*[[${scoreInterpretationMap[__${indicatorCode}__].fairScoreMin}]]*/ 50;
+              var goodScoreMin = /*[[${scoreInterpretationMap[__${indicatorCode}__].goodScoreMin}]]*/ 65;
+              $('.gauge[data-indicator=' + indicatorCode + ']').each(function () {
+                  createGauge(this, fairScoreMin, goodScoreMin);
+              });
+          });
+      </script>
+    </section>
+  </div>
+</div>
+</body>
+</html>

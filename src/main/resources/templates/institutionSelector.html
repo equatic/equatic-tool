@@ -1,0 +1,43 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<body layout:fragment="institutionSelector(url,inputName)">
+<input type="text" id="select-inst" class="form-control" th:placeholder="#{equatic.account.selectInstitution}"/>
+<input type="hidden" id="input-inst-id" th:name="${inputName}"/>
+
+<script th:inline="javascript">
+  $(function () {
+    var items = new Bloodhound({
+      datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name', 'nameEn'),
+      queryTokenizer: Bloodhound.tokenizers.whitespace,
+      prefetch: {
+        url: /*[[${url}]]*/ 'url',
+        cache: false
+      }
+    });
+
+    items.initialize();
+
+    $('#select-inst:not([readonly])').typeahead({
+      hint: true,
+      highlight: true,
+      minLength: 1
+    }, {
+      display: 'displayName',
+      source: items.ttAdapter(),
+      templates: {
+        suggestion: function (institution) {
+          var textInBrackets = institution.virtual ? 'National agency' : institution.country.name;
+          return '<p>' + institution.displayName + ' (' + textInBrackets + ')</p>';
+        }
+      }
+    }).on('typeahead:selected', function (event, institution) {
+      $('#input-inst-id').val(institution.id);
+
+      $(this).trigger('isSelectedInstitutionChanged', true);
+
+      $(this).trigger('isInstitutionWithFederatedIdPChanged', institution.withFederatedIdP);
+    });
+  });
+</script>
+</body>
+</html>

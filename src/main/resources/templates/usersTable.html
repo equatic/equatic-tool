@@ -1,0 +1,53 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      xmlns:dt="http://github.com/dandelion/datatables">
+<body layout:fragment="usersTable(users,showInstitution)">
+<div dt:conf="users-table">
+  <div dt:confType="export" dt:type="xls" dt:label="Export to XLS" dt:fileName="users"
+       dt:cssClass="btn btn-primary btn-sm button-xls-export"></div>
+</div>
+
+<table id="users-table" class="table" dt:table="true" dt:theme="bootstrap3">
+  <thead>
+  <tr>
+    <th th:text="#{equatic.username}" dt:sortInitDirection="asc" dt:sortInitOrder="1">Username</th>
+    <th th:text="#{equatic.institution}" dt:sortInitDirection="asc" dt:sortInitOrder="0" th:if="${showInstitution}">
+      Institution
+    </th>
+    <th th:text="#{equatic.firstname}">First Name</th>
+    <th th:text="#{equatic.lastname}">Last Name</th>
+    <th th:text="#{equatic.email}">E-mail</th>
+    <th th:text="#{equatic.activated}">Activated</th>
+    <th dt:sortable="false"></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="user,rowStat : ${users}" class="user-row">
+    <td th:text="${user.username}" name="username">user</td>
+    <td th:text="${user.institution.displayName}" th:if="${showInstitution}">Some University</td>
+    <td th:text="${user.firstname}">John</td>
+    <td th:text="${user.lastname}">Doe</td>
+    <td>
+        <span th:if="${user.emailConfirmed}" class="glyphicon glyphicon-ok text-success" aria-hidden="true"
+              data-toggle="tooltip" data-placement="top" th:title="#{equatic.admin.institutional.tip.emailConfirmed}"
+              title="Confirmed"></span>
+        <span th:unless="${user.emailConfirmed}" class="glyphicon glyphicon-remove text-danger"
+              aria-hidden="true" data-toggle="tooltip" data-placement="top"
+              th:title="#{equatic.admin.institutional.tip.emailNotConfirmed}"
+              title="Not confirmed"></span>
+      <span th:text="${user.email}">john.doe@institution.com</span>
+    </td>
+    <td>
+      <strong>
+        <span th:if="${user.activated}" th:text="#{equatic.yes}" class="text-success">Yes</span>
+        <span th:unless="${user.activated}" th:text="#{equatic.no}" class="text-danger">No</span>
+      </strong>
+    </td>
+    <td layout:fragment="actions">
+      Actions
+    </td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>

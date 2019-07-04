@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.1.xsd">
+    <!-- Suppression for security issues in jackson-databind 2.8.11.3 : https://nvd.nist.gov/view/vuln/search-results?adv_search=true&cves=on&cpe_version=cpe%3A%2Fa%3Afasterxml%3Ajackson-databind%3A2.8.11.3
+    Until at least Spring Boot 1.5.20 a vulnerable version is used
+    When Spring Boot has updated the jackson-databind library to version 2.9.8 this suppression should be removed -->
+    <suppress>
+        <notes><![CDATA[
+        file name: jackson-databind-2.8.11.3.jar
+        ]]>
+        </notes>
+        <gav regex="true">^com\.fasterxml\.jackson\.core:jackson-databind:.*$</gav>
+        <cpe>cpe:/a:fasterxml:jackson-databind</cpe>
+    </suppress>
+</suppressions>

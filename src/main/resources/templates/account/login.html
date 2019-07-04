@@ -1,0 +1,71 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+  <title th:text="#{equatic.account.login.title}">
+    Title
+  </title>
+  <link rel="stylesheet" th:href="@{/css/typeaheadjs.css}" href="../../static/css/typeaheadjs.css"/>
+  <script type="text/javascript" th:src="@{/js/account.js}" src="../../static/js/account.js"></script>
+  <script type="text/javascript" th:src="@{/js/typeahead.bundle.js}" src="../../static/js/typeahead.bundle.js"></script>
+</head>
+<body>
+<div layout:fragment="title" th:text="#{equatic.account.login.title}">
+  Title
+</div>
+<div layout:fragment="container" class="container">
+  <div layout:include="message :: message(message=${message})">
+    Message
+  </div>
+
+  <div class="row">
+    <div class="col-md-offset-2 col-md-8">
+      <h2 class="center-text" th:text="#{equatic.account.signin.header}">Sign in to eQuATIC</h2>
+
+      <form class="form-horizontal" th:action="@{/account/login}" method="post">
+        <div class="form-group required">
+          <label for="select-inst" class="col-sm-4 control-label" th:text="#{equatic.institution}">
+            Institution
+          </label>
+
+          <div class="col-sm-6">
+            <div layout:include="institutionSelector :: institutionSelector(@{/account/institutions/ajax},institution)">
+              Institution selector
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group hide requires-inst-wo-federated-idp required">
+          <label for="input-username" class="col-sm-4 control-label" th:text="#{equatic.username}">Username</label>
+
+          <div class="col-sm-6">
+            <input id="input-username" class="form-control" th:placeholder="#{equatic.username}" name="username"/>
+          </div>
+        </div>
+
+        <div class="form-group hide requires-inst-wo-federated-idp required">
+          <label for="input-password" class="col-sm-4 control-label"
+                 th:text="#{equatic.account.password}">Password</label>
+
+          <div class="col-sm-6">
+            <input id="input-password" class="form-control" th:placeholder="#{equatic.account.password}" name="password"
+                   type="password"/>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-sm-offset-4 col-sm-6">
+            <input id="button-signin" type="submit" value="Sign in" th:value="#{equatic.account.signin}"
+                   class="btn btn-primary requires-selected-inst" disabled="disabled"/>
+            <input id="button-register" type="submit" value="Register" th:value="#{equatic.account.register}"
+                   class="btn btn-success requires-selected-inst" disabled="disabled" th:action="@{/account/register}"/>
+            <a id="link-forgot-password" href="#" class="hide requires-selected-inst requires-inst-wo-federated-idp"
+               th:text="#{equatic.account.forgotPassword}" th:action="@{/account/forgotPassword}">Link</a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</body>
+</html>

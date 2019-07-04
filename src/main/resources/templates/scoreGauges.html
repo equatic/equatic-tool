@@ -1,0 +1,61 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<body layout:fragment="scoreGauges">
+<div>
+  <!--/*@thymesVar id="scoreInterpretation" type="be.ugent.equatic.domain.ScoreInterpretation"*/-->
+  <div class="col-md-4 col-sm-4 col-xs-12">
+    <div class="controlwrapper control1">
+      <div class="gauge controlgauge gauge-default" data-value="49"></div>
+
+      <div class="infowrap">
+        <h3>Intervention required</h3>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 col-sm-4 col-xs-12">
+    <div class="controlwrapper control2">
+      <div class="gauge controlgauge gauge-default" data-value="64"></div>
+
+      <div class="infowrap">
+        <h3>Fair</h3>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 col-sm-4 col-xs-12">
+    <div class="controlwrapper control3">
+      <div class="gauge controlgauge gauge-default" data-value="100"></div>
+
+      <div class="infowrap">
+        <h3>Good</h3>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script th:inline="javascript">
+    function createGauge(parentNode, fairScoreMin, goodScoreMin) {
+        var score = Math.round($(parentNode).data('value'));
+        var properties = {
+            value: score,
+            thresholds: fairScoreMin + ',' + goodScoreMin
+        };
+
+        var standardError = $(parentNode).data('standardError');
+        if (standardError !== undefined) {
+            var lowerErrorThreshold = Math.max(score - standardError, 0);
+            var upperErrorThreshold = Math.min(score + standardError, 100);
+            properties.arrows = lowerErrorThreshold + ',' + upperErrorThreshold;
+        }
+
+        new NumberGauge({target: parentNode, props: properties});
+    }
+
+    $(function () {
+        $('.gauge.gauge-default').each(function () {
+            createGauge(this, 50, 65);
+        });
+        $('.gauge.gauge-default .gauge-value').text(''); // Hide gauge values for legend (see EQUAT-417)
+    });
+</script>
+</body>
+</html>

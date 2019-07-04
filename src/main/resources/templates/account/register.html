@@ -1,0 +1,104 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+  <title th:text="#{equatic.account.register.title}">
+    Title
+  </title>
+  <script type="text/javascript" th:src="@{/js/account.js}" src="../../static/js/account.js"></script>
+</head>
+<body>
+<div layout:fragment="title" th:text="#{equatic.account.register.title}">
+  Title
+</div>
+<div layout:fragment="container" class="container">
+  <div layout:include="message :: message(message=${message})">
+    Message
+  </div>
+
+  <div id="registration-box" class="row">
+    <div class="col-md-offset-2 col-md-8">
+      <h2 class="center-text" th:text="#{equatic.account.register.header}">Create an e-QuATIC account</h2>
+
+      <form class="form-horizontal" th:action="@{/account/register}" action="#" th:object="${user}" method="post">
+        <div th:if="${#fields.hasErrors('*')}" class="col-sm-offset-2 col-sm-8">
+          <div layout:include="formErrors :: formErrors(errors=${#fields.errors('*')})">
+            Form errors
+          </div>
+        </div>
+
+        <div class="form-group required">
+          <label for="select-inst" class="col-sm-4 control-label">Institution</label>
+
+          <div class="col-sm-6">
+            <select id="select-inst" class="form-control" th:field="*{institution}" readonly="readonly">
+              <option th:value="*{institution.id}" th:text="*{institution.displayName}" selected="selected"></option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group required" th:classappend="${#fields.hasErrors('username')} ? 'has-error'">
+          <label for="input-username" class="col-sm-4 control-label" th:text="#{equatic.username}">Username</label>
+
+          <div class="col-sm-6">
+            <input type="text" class="form-control" id="input-username" th:placeholder="#{equatic.username}"
+                   th:field="*{username}" th:readonly="*{institution.idpEntityId}"/>
+          </div>
+        </div>
+        <div class="form-group required" th:classappend="${#fields.hasErrors('firstname')} ? 'has-error'">
+          <label for="input-firstname" class="col-sm-4 control-label" th:text="#{equatic.firstname}">First Name</label>
+
+          <div class="col-sm-6">
+            <input type="text" class="form-control" id="input-firstname" th:placeholder="#{equatic.firstname}"
+                   th:field="*{firstname}"/>
+          </div>
+        </div>
+        <div class="form-group required" th:classappend="${#fields.hasErrors('lastname')} ? 'has-error'">
+          <label for="input-lastname" class="col-sm-4 control-label" th:text="#{equatic.lastname}">Last Name</label>
+
+          <div class="col-sm-6">
+            <input type="text" class="form-control" id="input-lastname" th:placeholder="#{equatic.lastname}"
+                   th:field="*{lastname}"/>
+          </div>
+        </div>
+        <div class="form-group required" th:classappend="${#fields.hasErrors('email')} ? 'has-error'">
+          <label for="input-email" class="col-sm-4 control-label" th:text="#{equatic.email}">E-mail</label>
+
+          <div class="col-sm-6">
+            <input type="email" class="form-control" id="input-email" th:placeholder="#{equatic.email}"
+                   th:field="*{email}"/>
+          </div>
+        </div>
+
+        <div class="form-group required" th:classappend="${#fields.hasErrors('rawPassword')} ? 'has-error'">
+          <label for="input-password" class="col-sm-4 control-label"
+                 th:text="#{equatic.account.password}">Password</label>
+
+          <div class="col-sm-6">
+            <input type="password" class="form-control" id="input-password" th:placeholder="#{equatic.account.password}"
+                   th:field="*{rawPassword}" th:disabled="*{institution.idpEntityId}"/>
+          </div>
+        </div>
+        <div class="form-group required" th:classappend="${#fields.hasErrors('confirmRawPassword')} ? 'has-error'">
+          <label for="input-confirm-password" class="col-sm-4 control-label"
+                 th:text="#{equatic.account.confirmPassword}">Confirm Password</label>
+
+          <div class="col-sm-6">
+            <input type="password" class="form-control" id="input-confirm-password"
+                   th:placeholder="#{equatic.account.confirmPassword}"
+                   th:field="*{confirmRawPassword}" th:disabled="*{institution.idpEntityId}"/>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-sm-offset-4 col-sm-6">
+            <input id="submit-register" type="submit" value="Create" th:value="#{equatic.create}"
+                   class="btn btn-success"/>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</body>
+</html>
