@@ -1,5 +1,9 @@
 package be.ugent.equatic.service;
 
+import be.ugent.equatic.domain.*;
+import be.ugent.equatic.util.BroadIscedStat;
+import be.ugent.equatic.util.IscedStat;
+import be.ugent.equatic.web.user.national.NationalUserReportRow;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
@@ -10,10 +14,6 @@ import org.hibernate.type.StringType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import be.ugent.equatic.domain.*;
-import be.ugent.equatic.util.BroadIscedStat;
-import be.ugent.equatic.util.IscedStat;
-import be.ugent.equatic.web.user.national.NationalUserReportRow;
 
 import javax.persistence.EntityManager;
 import java.util.*;
@@ -334,6 +334,46 @@ public class DataSheetRowService {
             ") STUDENT_SCORES\n" +
             "WHERE 1 = 1 ";
 
+    private static final String EDUCATIONAL_COOPERATION_QUERY = "SELECT\n" +
+            "  PARTNER_PROJECTS.PARTNER_INST_ID,\n" +
+            "  DENSE_RANK()\n" +
+            "  OVER (\n" +
+            "    ORDER BY PROJECTS_COUNT ) * 50 / (SELECT COUNT( DISTINCT COUNT(DISTINCT ID)) AS MAX_PROJECTS_COUNT\n" +
+            "   FROM\n" +
+            "     DATA_SHEET_ROWS\n" +
+            "   WHERE\n" +
+            "     DATA_SHEET_CODE = :dataSheet\n" +
+            "     AND ACADEMIC_YEAR IN (:academicYears) AND (:ignoreIsced = 1 OR ISCED_CODE IN (:isceds)) AND INST_ID IN (:institutions)\n" +
+            "   GROUP BY PARTNER_INST_ID)" +
+            "  + CASE WHEN GRADUATES_COUNT IS NULL\n" +
+            "    THEN 0\n" +
+            "    ELSE 25 + 25 * GRADUATES_COUNT / (SELECT SUM(DATA_SHEET_ROW_VALUES.NUMERIC_VALUE)\n" +
+            "                            FROM DATA_SHEET_ROWS\n" +
+            "                              JOIN DATA_SHEET_ROW_VALUES\n" +
+            "                                ON DATA_SHEET_ROWS.ID = ROW_ID AND COLUMN_CODE = :graduatesNumberColumn\n" +
+            "                                   AND ACADEMIC_YEAR IN (:academicYears) AND (:ignoreIsced = 1 OR ISCED_CODE IN (:isceds)) AND INST_ID IN (:institutions)) END AS SCORE\n" +
+            "FROM (\n" +
+            "  SELECT\n" +
+            "    PARTNER_INST_ID,\n" +
+            "    COUNT(DISTINCT ID) AS PROJECTS_COUNT\n" +
+            "  FROM\n" +
+            "    DATA_SHEET_ROWS\n" +
+            "  WHERE\n" +
+            "    DATA_SHEET_CODE = :dataSheet\n" +
+            "    AND ACADEMIC_YEAR IN (:academicYears) AND (:ignoreIsced = 1 OR ISCED_CODE IN (:isceds)) AND INST_ID IN (:institutions)\n" +
+            "  GROUP BY PARTNER_INST_ID\n" +
+            ") PARTNER_PROJECTS\n" +
+            "  LEFT JOIN (\n" +
+            "              SELECT\n" +
+            "                PARTNER_INST_ID,\n" +
+            "                SUM(DATA_SHEET_ROW_VALUES.NUMERIC_VALUE) AS GRADUATES_COUNT\n" +
+            "              FROM\n" +
+            "                DATA_SHEET_ROWS\n" +
+            "                JOIN DATA_SHEET_ROW_VALUES\n" +
+            "                  ON DATA_SHEET_ROWS.ID = ROW_ID AND COLUMN_CODE = :graduatesNumberColumn\n" +
+            "              GROUP BY PARTNER_INST_ID\n" +
+            "            ) PARTNER_PROGRAMMES ON PARTNER_PROJECTS.PARTNER_INST_ID = PARTNER_PROGRAMMES.PARTNER_INST_ID\n" +
+            "WHERE 1 = 1 ";
 
     private static final String CALCULATE_SCORES_FROM_DEFAULT_VALUES_QUERY = "SELECT\n" +
             "  PARTNER_INST_ID,\n" +
@@ -867,6 +907,35 @@ public class DataSheetRowService {
         return query.list();
     }
 
+    public List<Object[]> calculateEducationalCooperationScores(List<Institution> institutions,
+                                                                List<AcademicYear> academicYears,
+                                                                List<Isced> isceds,
+                                                                List<Institution> filteredInstitutions) {
+        Session session = getSession();
+        String rawQuery = EDUCATIONAL_COOPERATION_QUERY;
+
+        if (filteredInstitutions != null) {
+            rawQuery += "AND PARTNER_INST_ID IN (:partnerInstitutions) ";
+        }
+
+        SQLQuery query = session.createSQLQuery(rawQuery);
+
+        if (filteredInstitutions != null) {
+            query.setParameterList("partnerInstitutions",
+                    filteredInstitutions.stream().map(Institution::getId).toArray());
+        }
+
+        setCommonParametersForQuery(query, institutions, academicYears, isceds);
+
+        query.addScalar("PARTNER_INST_ID", LongType.INSTANCE)
+                .addScalar("SCORE", DoubleType.INSTANCE);
+
+        query.setParameter("dataSheet", DataSheetCode.EDUCATIONAL_PROJECTS.name())
+                .setParameter("graduatesNumberColumn", DataSheetColumnCode.GRADUATES_NUMBER.name());
+
+        return query.list();
+    }
+
     public Integer getDataSheetRowsCount(Institution institution, List<AcademicYear> academicYears, List<Isced> isceds,
                                          Institution partnerInstitution, DataSheetCode dataSheetCode) {
         Session session = getSession();
@@ -1112,5 +1181,28 @@ public class DataSheetRowService {
                                            DataSheetColumnCode columnCode, DataSheetValueCode valueCode) {
         return dataSheetRowRepository.countRowsWithColumnAndValue(institution, academicYears, isceds == null, isceds,
                 partnerInstitution, columnCode, valueCode);
+    }
+
+    @Transactional(readOnly = true)
+    public int countEducationalProjects(Institution institution, List<AcademicYear> academicYears, List<Isced> isceds,
+                                        Institution partnerInstitution) {
+        return dataSheetRowRepository.countDataSheetRows(institution, academicYears, isceds == null, isceds,
+                partnerInstitution, DataSheetCode.EDUCATIONAL_PROJECTS);
+    }
+
+    @Transactional(readOnly = true)
+    public int countJointProgrammes(Institution institution, List<AcademicYear> academicYears, List<Isced> isceds,
+                                    Institution partnerInstitution) {
+        return dataSheetRowRepository.countDataSheetRows(institution, academicYears, isceds == null, isceds,
+                partnerInstitution, DataSheetCode.JOINT_PROGRAMMES);
+    }
+
+    @Transactional(readOnly = true)
+    public int countJointProgrammesGraduates(Institution institution, List<AcademicYear> academicYears,
+                                             List<Isced> isceds, Institution partnerInstitution) {
+        Integer count =
+                dataSheetRowRepository.countSumDataSheetRowColumns(institution, academicYears, isceds == null, isceds,
+                        partnerInstitution, DataSheetColumnCode.GRADUATES_NUMBER);
+        return count == null ? 0 : count;
     }
 }

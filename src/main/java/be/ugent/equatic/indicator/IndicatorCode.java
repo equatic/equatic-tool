@@ -9,7 +9,8 @@ public enum IndicatorCode {
     COURSE_CATALOGUE_INFORMATION(new CourseCatalogueInformationIndicator()),
     EXCHANGE_OF_ECTS_DOCUMENTS(new ExchangeOfEctsDocumentsIndicator()),
     MOBILITY_RATE(new MobilityRateIndicator()),
-    INVOLVEMENT(new InvolvementIndicator());
+    INVOLVEMENT(new InvolvementIndicator()),
+    EDUCATIONAL_COOPERATION(new EducationalCooperationIndicator());
 
     private final Indicator indicator;
 

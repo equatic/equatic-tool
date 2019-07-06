@@ -1,15 +1,5 @@
 package be.ugent.equatic.web.admin.institutional;
 
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import be.ugent.equatic.domain.*;
 import be.ugent.equatic.exception.DataSheetColumnNotFoundException;
 import be.ugent.equatic.exception.DataSheetUploadNotFoundException;
@@ -20,6 +10,16 @@ import be.ugent.equatic.service.DataSheetService;
 import be.ugent.equatic.service.DataSheetUploadService;
 import be.ugent.equatic.web.util.Message;
 import be.ugent.equatic.web.util.PrincipalUtil;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -54,8 +54,8 @@ public class DataSheetUploadController extends InstitutionalAdminController {
     private DataSheetCode[] getDataSheetCodes() {
         return new DataSheetCode[]{
                 DataSheetCode.SMS, DataSheetCode.SMP, DataSheetCode.STUDENTS_INCOMING, DataSheetCode.STUDENTS_OUTGOING,
-                DataSheetCode.STAFF_INCOMING, DataSheetCode.STAFF_OUTGOING, DataSheetCode.INSTITUTIONAL_AGREEMENTS /*,
-                DataSheetCode.EDUCATIONAL_PROJECTS, DataSheetCode.JOINT_PROGRAMMES*/};
+                DataSheetCode.STAFF_INCOMING, DataSheetCode.STAFF_OUTGOING, DataSheetCode.INSTITUTIONAL_AGREEMENTS,
+                DataSheetCode.EDUCATIONAL_PROJECTS, DataSheetCode.JOINT_PROGRAMMES};
     }
 
     @ModelAttribute("academicYear")

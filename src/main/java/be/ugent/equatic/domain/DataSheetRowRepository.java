@@ -56,4 +56,19 @@ public interface DataSheetRowRepository extends JpaRepository<DataSheetRow, Long
     int countRowsWithColumnAndValue(Institution institution, List<AcademicYear> academicYears, boolean ignoreIsced,
                                     List<Isced> isceds, Institution partnerInstitution,
                                     DataSheetColumnCode columnCode, DataSheetValueCode valueCode);
+
+    @Query("select count(distinct dsr.id) " +
+            "from DataSheetRow dsr join dsr.values dsrv " +
+            "where dsr.institution in ?1 and dsr.academicYear in ?2 and (true = ?3 or dsr.isced in (?4)) " +
+            "and dsr.partnerInstitution = ?5 and dsr.dataSheet.code = ?6")
+    int countDataSheetRows(Institution institution, List<AcademicYear> academicYears, boolean ignoreIsced,
+                           List<Isced> isceds, Institution partnerInstitution, DataSheetCode dataSheetCode);
+
+    @Query("select sum(dsrv.numericValue) " +
+            "from DataSheetRow dsr join dsr.values dsrv " +
+            "where dsr.institution in ?1 and dsr.academicYear in ?2 and (true = ?3 or dsr.isced in (?4)) " +
+            "and dsr.partnerInstitution = ?5 and dsrv.columnCode = ?6")
+    Integer countSumDataSheetRowColumns(Institution institution, List<AcademicYear> academicYears, boolean ignoreIsced,
+                                        List<Isced> isceds, Institution partnerInstitution,
+                                        DataSheetColumnCode graduatesNumber);
 }
