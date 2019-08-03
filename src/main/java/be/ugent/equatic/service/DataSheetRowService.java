@@ -239,19 +239,16 @@ public class DataSheetRowService {
             "  AVG(FACILITIES_AVGS.AVG) AS FACILITIES_SUBSCORE\n" +
             "FROM\n" +
             "  DATA_SHEET_ROWS\n" +
-            "  JOIN DATA_SHEET_ROW_VALUES ON DATA_SHEET_ROWS.ID = DATA_SHEET_ROW_VALUES.ROW_ID\n" +
             "  LEFT JOIN (\n" +
-            "    SELECT PARTNER_INST_ID, DATA_SHEET_ROWS.ID, " + SUPPORT_SUBSCORE_QUERY +
+            "    SELECT PARTNER_INST_ID, DATA_SHEET_ROWS.ID AS ROW_ID, " + SUPPORT_SUBSCORE_QUERY +
             "    GROUP BY PARTNER_INST_ID, DATA_SHEET_ROWS.ID\n" +
-            "  ) SUPPORT_AVGS ON DATA_SHEET_ROWS.PARTNER_INST_ID = SUPPORT_AVGS.PARTNER_INST_ID\n" +
+            "  ) SUPPORT_AVGS ON DATA_SHEET_ROWS.ID = SUPPORT_AVGS.ROW_ID\n" +
             "  LEFT JOIN (\n" +
-            "    SELECT PARTNER_INST_ID, DATA_SHEET_ROWS.ID, " + FACILITIES_SUBSCORE_QUERY +
+            "    SELECT PARTNER_INST_ID, DATA_SHEET_ROWS.ID AS ROW_ID, " + FACILITIES_SUBSCORE_QUERY +
             "    GROUP BY PARTNER_INST_ID, DATA_SHEET_ROWS.ID\n" +
-            "  ) FACILITIES_AVGS ON DATA_SHEET_ROWS.PARTNER_INST_ID = FACILITIES_AVGS.PARTNER_INST_ID\n" +
+            "  ) FACILITIES_AVGS ON DATA_SHEET_ROWS.ID = FACILITIES_AVGS.ROW_ID\n" +
             "WHERE\n" +
-            "  (COLUMN_CODE IN (:supportColumnCodes) OR COLUMN_CODE IN (:facilitiesColumnCodes))\n" +
-            "  AND ACADEMIC_YEAR IN (:academicYears) AND (:ignoreIsced = 1 OR ISCED_CODE IN (:isceds))" +
-            "  AND INST_ID IN (:institutions) ";
+            "  SUPPORT_AVGS.ROW_ID IS NOT NULL AND INST_ID IN (:institutions) ";
 
     private static final String STUDY_SUCCESS_PERCENTAGE_QUERY = "SELECT\n" +
             "    100 * SUM(CREDITS_COMPLETED.NUMERIC_VALUE) / SUM(CREDITS_TAKEN.NUMERIC_VALUE) PERCENTAGE\n" +
