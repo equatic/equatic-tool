@@ -40,21 +40,22 @@ public class DataSheetRowService {
             "            )\n" +
             "    THEN 0.5\n" +
             "  ELSE 0 END AS SCORE,\n" +
-            "  COUNT(DISTINCT ROWS_COUNTED.ID) AS STUDENTS_COUNT,\n" +
-            "  VAR_POP(LA.SUBSCORE) * COUNT(DISTINCT ROWS_COUNTED.ID) AS LA_SUM_SQUARE_DIFF,\n" +
+            "  ROWS_COUNTED.COUNT AS STUDENTS_COUNT,\n" +
+            "  VAR_POP(LA.SUBSCORE) * ROWS_COUNTED.COUNT AS LA_SUM_SQUARE_DIFF,\n" +
             "  AVG(LA.SUBSCORE) AS LA_SUBSCORE,\n" +
-            "  VAR_POP(TOR_CERTIFICATE.SUBSCORE) * COUNT(DISTINCT ROWS_COUNTED.ID) AS TOR_SUM_SQUARE_DIFF,\n" +
+            "  VAR_POP(TOR_CERTIFICATE.SUBSCORE) * ROWS_COUNTED.COUNT AS TOR_SUM_SQUARE_DIFF,\n" +
             "  AVG(TOR_CERTIFICATE.SUBSCORE) AS TOR_SUBSCORE\n" +
             "FROM\n" +
             "  (\n" +
             "    SELECT\n" +
             "      PARTNER_INST_ID,\n" +
-            "      DATA_SHEET_ROWS.ID\n" +
+            "      COUNT(DISTINCT DATA_SHEET_ROWS.ID) AS COUNT\n" +
             "    FROM DATA_SHEET_ROWS\n" +
             "      JOIN DATA_SHEET_ROW_VALUES ON DATA_SHEET_ROWS.ID = DATA_SHEET_ROW_VALUES.ROW_ID\n" +
             "    WHERE COLUMN_CODE IN\n" +
             "          (:smsLaSignedColumn, :smsLaNotSignedColumn, :smpLaSignedColumn, :smpLaNotSignedColumn, :smsTorColumn, :smpCertificateColumn)\n" +
             "          AND ACADEMIC_YEAR IN (:academicYears) AND (:ignoreIsced = 1 OR ISCED_CODE IN (:isceds)) AND INST_ID IN (:institutions)\n" +
+            "    GROUP BY PARTNER_INST_ID\n" +
             "  ) ROWS_COUNTED\n" +
             "  LEFT JOIN (\n" +
             "              SELECT\n" +
