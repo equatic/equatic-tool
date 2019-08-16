@@ -1,15 +1,15 @@
 package be.ugent.equatic.datasheet;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
 import be.ugent.equatic.domain.DataSheet;
 import be.ugent.equatic.domain.DataSheetColumn;
 import be.ugent.equatic.domain.DataSheetColumnType;
 import be.ugent.equatic.domain.DataSheetValueType;
 import be.ugent.equatic.exception.DataSheetInternalErrorException;
 import be.ugent.equatic.exception.DataSheetProcessingException;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 
 import java.util.*;
 
@@ -47,8 +47,13 @@ public class DataSheetParser {
 
                     switch (valueType) {
                         case NUMERIC:
-                            cell.setCellType(valueType.getCellType());
-                            value = cell.getNumericCellValue();
+                            try {
+                                cell.setCellType(valueType.getCellType());
+                                value = cell.getNumericCellValue();
+                            } catch (IllegalStateException exception) {
+                                throw new DataSheetProcessingException(
+                                        "equatic.dataSheet.invalidFormat.cellTypeShouldBeNumeric", column.getTitle());
+                            }
                             break;
                         case STRING:
                             cell.setCellType(valueType.getCellType());
@@ -62,7 +67,7 @@ public class DataSheetParser {
                                 value = cell.getDateCellValue();
                             } catch (Exception exception) {
                                 throw new DataSheetProcessingException(
-                                        "equatic.dataSheet.invalidFormat.invalidDateFormat", exception);
+                                        "equatic.dataSheet.invalidFormat.invalidDateFormat", column.getTitle());
                             }
                             break;
                         default:
