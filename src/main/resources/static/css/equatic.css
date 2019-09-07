@@ -83,3 +83,7 @@ nav a:hover, nav a:focus {
 .students-count::after {
     content: ")";
 }
+
+.students-count {
+    cursor: pointer;
+}

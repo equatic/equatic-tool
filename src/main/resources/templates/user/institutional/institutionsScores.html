@@ -8,8 +8,13 @@
   </title>
   <link rel="stylesheet" th:href="@{/css/select2.css}" href="../../../static/css/select2.css"/>
   <link rel="stylesheet" th:href="@{/css/isceds.css}" href="../../../static/css/isceds.css"/>
+  <link rel="stylesheet" th:href="@{/css/institution-report.css}" href="../../../static/css/institution-report.css"/>
   <script type="text/javascript" th:src="@{/js/select2.min.js}" src="../../../static/js/select2.min.js"></script>
   <script type="text/javascript" th:src="@{/js/isceds.js}" src="../../../static/js/isceds.js"></script>
+  <script type="text/javascript" th:src="@{/js/NumberGauge.custom.min.js}"
+          src="../../../static/js/NumberGauge.custom.min.js"></script>
+  <script type="text/javascript" th:src="@{/js/NumberGauge.min.js}"
+          src="../../../static/js/NumberGauge.min.js"></script>
 </head>
 <body>
 <div layout:fragment="title" th:text="#{equatic.institutionsScores.title}">
@@ -56,23 +61,68 @@
       <!--suppress ThymeleafVariablesResolveInspection -->
       <td th:text="${country.name}">Belgium</td>
       <!--suppress ThymeleafVariablesResolveInspection -->
-      <td th:each="score : ${scoresEntry.value}">
+      <td th:each="score, iterStat : ${scoresEntry.value}">
         <!--/*@thymesVar id="score" type="be.ugent.equatic.indicator.Score"*/-->
         <div th:if="${score}">
           <span th:text="${#numbers.formatDecimal(score.value, 1, 2, 'POINT')}">
             10.0
-          </span><sup aria-hidden="true" data-toggle="tooltip" data-placement="top"
-                      th:title="#{equatic.user.institutional.tip(${score.standardError})}"
-                      title="Number of students taken into account. Standard error: 1."
+          </span><sup aria-hidden="true" data-toggle="modal"
+                      th:attr="data-target='#modal-' + ${scoresEntry.key.id} + '-' + ${iterStat.index}"
                       th:if="${score.studentsCount}"><span th:text="${score.studentsCount}" class="students-count">
             5
           </span></sup>
+          <div th:id="'modal-' + ${scoresEntry.key.id} + '-' + ${iterStat.index}" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-body">
+                  <div class="tbl-container">
+                    <div class="tbl-row">
+                      <div class="tbl-cell gauge width40 rounded-bottomleft">
+                        <div class="gauge gaugeperform"
+                             th:attr="data-value=${score.value},data-standard-error=${score.standardError}"></div>
+                      </div>
+                      <div class="tbl-cell width60">
+                        <div class="tbl-container-inner">
+                          <div class="tbl-row singleitem">
+                            <div layout:include="user/institutional/referenceGroup :: referenceGroup(${score.studentsCount})"
+                                 class="tbl-cell data rounded-bottomright" style="font-size: 20px; line-height: 3em;">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <span th:unless="${score}"></span>
       </td>
     </tr>
     </tbody>
   </table>
+
+  <script th:inline="javascript">
+      $(function () {
+          $('.gaugeperform').each(function () {
+              var score = Math.round($(this).data('value'));
+              var properties = {
+                  value: score,
+                  thresholds: '0,0'
+              };
+
+              var standardError = $(this).data('standardError');
+              if (standardError !== undefined) {
+                  var lowerErrorThreshold = Math.max(score - standardError, 0);
+                  var upperErrorThreshold = Math.min(score + standardError, 100);
+                  properties.arrows = lowerErrorThreshold + ',' + upperErrorThreshold;
+              }
+
+              new NumberGauge({target: this, props: properties});
+          });
+      });
+  </script>
 </div>
 </body>
 </html>
