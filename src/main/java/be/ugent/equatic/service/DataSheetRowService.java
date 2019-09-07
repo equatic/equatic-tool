@@ -40,10 +40,10 @@ public class DataSheetRowService {
             "            )\n" +
             "    THEN 0.5\n" +
             "  ELSE 0 END AS SCORE,\n" +
-            "  ROWS_COUNTED.COUNT AS STUDENTS_COUNT,\n" +
-            "  VAR_POP(LA.SUBSCORE) * ROWS_COUNTED.COUNT AS LA_SUM_SQUARE_DIFF,\n" +
+            "  MAX(ROWS_COUNTED.COUNT) AS STUDENTS_COUNT,\n" +
+            "  VAR_POP(LA.SUBSCORE) * MAX(ROWS_COUNTED.COUNT) AS LA_SUM_SQUARE_DIFF,\n" +
             "  AVG(LA.SUBSCORE) AS LA_SUBSCORE,\n" +
-            "  VAR_POP(TOR_CERTIFICATE.SUBSCORE) * ROWS_COUNTED.COUNT AS TOR_SUM_SQUARE_DIFF,\n" +
+            "  VAR_POP(TOR_CERTIFICATE.SUBSCORE) * MAX(ROWS_COUNTED.COUNT) AS TOR_SUM_SQUARE_DIFF,\n" +
             "  AVG(TOR_CERTIFICATE.SUBSCORE) AS TOR_SUBSCORE\n" +
             "FROM\n" +
             "  (\n" +
