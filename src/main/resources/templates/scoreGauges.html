@@ -1,7 +1,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 <body layout:fragment="scoreGauges">
-<div>
+<div class="row">
   <!--/*@thymesVar id="scoreInterpretation" type="be.ugent.equatic.domain.ScoreInterpretation"*/-->
   <div class="col-md-4 col-sm-4 col-xs-12">
     <div class="controlwrapper control1">
@@ -28,6 +28,18 @@
       <div class="infowrap">
         <h3>Good</h3>
       </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12 controlwrapper control4">
+    <div class="gauge controlgauge gauge-default" data-value="50" data-standard-error="30"></div>
+
+    <div class="infowrap">
+      <p>
+        The interval indicated by the &#x25BE; symbols, show the so called "confidence interval"
+        illustrating the reliability of the score. The narrower the interval, the more reliable the indicator score.
+      </p>
     </div>
   </div>
 </div>
