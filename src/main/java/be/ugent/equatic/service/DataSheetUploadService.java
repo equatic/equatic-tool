@@ -1,5 +1,11 @@
 package be.ugent.equatic.service;
 
+import be.ugent.equatic.datasheet.DataSheetParsedRow;
+import be.ugent.equatic.datasheet.DataSheetParsedRowValue;
+import be.ugent.equatic.datasheet.DataSheetParser;
+import be.ugent.equatic.domain.*;
+import be.ugent.equatic.exception.*;
+import be.ugent.equatic.web.util.*;
 import com.google.common.base.Joiner;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,12 +13,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import be.ugent.equatic.datasheet.DataSheetParsedRow;
-import be.ugent.equatic.datasheet.DataSheetParsedRowValue;
-import be.ugent.equatic.datasheet.DataSheetParser;
-import be.ugent.equatic.domain.*;
-import be.ugent.equatic.exception.*;
-import be.ugent.equatic.web.util.*;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -80,7 +80,8 @@ public class DataSheetUploadService {
     }
 
     public void uploadDataSheet(DataSheet dataSheet, Sheet sheet, Institution institution, User admin,
-                                AcademicYear academicYear, RedirectAttributes redirect, Locale locale) {
+                                AcademicYear academicYear, boolean selfAssessment, RedirectAttributes redirect,
+                                Locale locale) {
         try {
             List<DataSheetParsedRow> rows = DataSheetParser.parseDataSheet(sheet, dataSheet);
 
@@ -91,7 +92,7 @@ public class DataSheetUploadService {
 
             for (DataSheetParsedRow row : rows) {
                 processDataSheetRow(row, upload, institution, academicYear, foundInstitutions, notFoundInstitutions,
-                        validDataSheetRows, locale);
+                        validDataSheetRows, selfAssessment, locale);
             }
 
             dataSheetRowService.deleteByInstitutionAndDataSheetAndAcademicYear(institution, dataSheet, academicYear);
@@ -133,7 +134,7 @@ public class DataSheetUploadService {
                                      Institution uploaderInstitution, AcademicYear academicYear,
                                      Set<Institution> matchedInstitutions,
                                      Set<SearchedInstitution> notFoundInstitutions,
-                                     List<DataSheetRow> validDataSheetRows, Locale locale) {
+                                     List<DataSheetRow> validDataSheetRows, boolean selfAssessment, Locale locale) {
         int rowNumber = parsedRow.getRowNum();
         DataSheet dataSheet = upload.getDataSheet();
 
@@ -161,7 +162,7 @@ public class DataSheetUploadService {
             }
 
             DataSheetRow dataSheetRow = new DataSheetRow(academicYear, uploaderInstitution, dataSheet,
-                    partnerInstitution, isced);
+                    partnerInstitution, isced, selfAssessment);
 
             addValuesToRow(parsedRow, dataSheetRow);
 

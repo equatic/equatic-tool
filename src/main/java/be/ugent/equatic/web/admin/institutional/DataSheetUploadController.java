@@ -50,6 +50,11 @@ public class DataSheetUploadController extends InstitutionalAdminController {
     @Autowired
     private DataSheetUploadService dataSheetUploadService;
 
+    @ModelAttribute("selfAssessment")
+    public boolean isSelfAssessment(@RequestParam(required = false, defaultValue = "false") boolean selfAssessment) {
+        return selfAssessment;
+    }
+
     @ModelAttribute("dataSheetCodes")
     private DataSheetCode[] getDataSheetCodes() {
         return new DataSheetCode[]{
@@ -69,11 +74,13 @@ public class DataSheetUploadController extends InstitutionalAdminController {
 
     @ModelAttribute("uploadStats")
     public Map<DataSheetCode, UploadStat> getUploadStats(@ModelAttribute Institution institution,
-                                                         @ModelAttribute AcademicYear academicYear) {
+                                                         @ModelAttribute AcademicYear academicYear,
+                                                         @ModelAttribute("selfAssessment") boolean selfAssessment) {
         Map<DataSheetCode, UploadStat> result = new HashMap<>();
 
         for (UploadStat uploadStat :
-                dataSheetRowService.getUploadStatsForInstitutionAndAcademicYear(institution, academicYear)) {
+                dataSheetRowService.getUploadStatsForInstitutionAndAcademicYear(institution, academicYear,
+                        selfAssessment)) {
             result.put(uploadStat.getDataSheet().getCode(), uploadStat);
         }
 
@@ -89,11 +96,13 @@ public class DataSheetUploadController extends InstitutionalAdminController {
 
     @RequestMapping(value = VIEW_DATA_SHEET_UPLOAD, method = RequestMethod.POST)
     public String dataSheetUpload(@ModelAttribute Institution institution, @ModelAttribute AcademicYear academicYear,
+                                  @ModelAttribute("selfAssessment") boolean selfAssessment,
                                   @RequestParam MultipartFile file, @PathVariable DataSheetCode dataSheetCode,
                                   RedirectAttributes redirect, Principal principal, Locale locale)
             throws IOException, InvalidFormatException {
         redirect.addAttribute("instId", institution.getId());
         redirect.addAttribute("year", academicYear.getAcademicYear());
+        redirect.addAttribute("selfAssessment", selfAssessment);
 
         if (file.isEmpty()) {
             String uploadFileRequired = messageSource.getMessage("equatic.upload.required", null, locale);
@@ -106,7 +115,8 @@ public class DataSheetUploadController extends InstitutionalAdminController {
         Sheet sheet = workbook.getSheetAt(0);
         User admin = PrincipalUtil.getUser(principal);
 
-        dataSheetUploadService.uploadDataSheet(dataSheet, sheet, institution, admin, academicYear, redirect, locale);
+        dataSheetUploadService.uploadDataSheet(dataSheet, sheet, institution, admin, academicYear, selfAssessment,
+                redirect, locale);
 
         return "redirect:" + VIEW_DATA_SHEET_UPLOAD_PAGE;
     }

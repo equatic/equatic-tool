@@ -42,7 +42,7 @@
   <!--/*@thymesVar id="dataSheetCodes" type="DataSheetCode[]"*/-->
   <div th:each="dataSheetCode : ${dataSheetCodes}">
     <div class="row">
-      <div layout:include="admin/dataSheetRow :: dataSheetRow(${dataSheetCode},${institution},${academicYear})">
+      <div layout:include="admin/dataSheetRow :: dataSheetRow(${dataSheetCode},${institution},${academicYear},${selfAssessment})">
         Data sheet row
       </div>
     </div>

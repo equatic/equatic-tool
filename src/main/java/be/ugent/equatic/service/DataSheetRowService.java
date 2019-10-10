@@ -628,8 +628,10 @@ public class DataSheetRowService {
     }
 
     public List<UploadStat> getUploadStatsForInstitutionAndAcademicYear(Institution institution,
-                                                                        AcademicYear academicYear) {
-        return dataSheetRowRepository.getUploadStatsForInstitutionAndAcademicYear(institution, academicYear).stream()
+                                                                        AcademicYear academicYear,
+                                                                        boolean selfAssessment) {
+        return dataSheetRowRepository.getUploadStatsForInstitutionAndAcademicYear(institution, academicYear,
+                selfAssessment).stream()
                 .map(result -> new UploadStat((DataSheet) result[0], (Long) result[1], (Long) result[2]))
                 .collect(Collectors.toList());
     }

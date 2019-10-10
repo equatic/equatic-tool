@@ -36,6 +36,8 @@ public class DataSheetRow {
     @OneToMany(mappedBy = "row", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<DataSheetRowValue> values = new HashSet<>();
 
+    private boolean selfAssessment = false;
+
     public DataSheetRow() {
     }
 
@@ -46,6 +48,16 @@ public class DataSheetRow {
         this.dataSheet = dataSheet;
         this.partnerInstitution = partnerInstitution;
         this.isced = isced;
+    }
+
+    public DataSheetRow(AcademicYear academicYear, Institution institution, DataSheet dataSheet,
+                        Institution partnerInstitution, Isced isced, boolean selfAssessment) {
+        this.academicYear = academicYear;
+        this.institution = institution;
+        this.dataSheet = dataSheet;
+        this.partnerInstitution = partnerInstitution;
+        this.isced = isced;
+        this.selfAssessment = selfAssessment;
     }
 
     public Long getId() {
@@ -80,19 +92,30 @@ public class DataSheetRow {
         values.add(rowValue);
     }
 
+    public boolean isSelfAssessment() {
+        return selfAssessment;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
 
         DataSheetRow that = (DataSheetRow) o;
 
-        if (!academicYear.equals(that.academicYear)) return false;
-        if (institution != null ? !institution.equals(that.institution) : that.institution != null) return false;
-        if (!dataSheet.equals(that.dataSheet)) return false;
+        if (!academicYear.equals(that.academicYear))
+            return false;
+        if (institution != null ? !institution.equals(that.institution) : that.institution != null)
+            return false;
+        if (!dataSheet.equals(that.dataSheet))
+            return false;
         if (partnerInstitution != null ? !partnerInstitution.equals(
-                that.partnerInstitution) : that.partnerInstitution != null) return false;
-        if (isced != null ? !isced.equals(that.isced) : that.isced != null) return false;
+                that.partnerInstitution) : that.partnerInstitution != null)
+            return false;
+        if (isced != null ? !isced.equals(that.isced) : that.isced != null)
+            return false;
         return values.equals(that.values);
 
     }

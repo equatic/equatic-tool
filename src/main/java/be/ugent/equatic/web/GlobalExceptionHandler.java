@@ -1,5 +1,8 @@
 package be.ugent.equatic.web;
 
+import be.ugent.equatic.exception.InstitutionNotSelectedBySuperAdminException;
+import be.ugent.equatic.exception.UserMessageException;
+import be.ugent.equatic.web.admin.superadmin.InstitutionSelectionController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
@@ -7,9 +10,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
-import be.ugent.equatic.exception.InstitutionNotSelectedBySuperAdminException;
-import be.ugent.equatic.exception.UserMessageException;
-import be.ugent.equatic.web.admin.superadmin.InstitutionSelectionController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,6 +31,7 @@ public class GlobalExceptionHandler {
         ModelAndView modelAndView = new ModelAndView(redirectView, "nextAction",
                 request.getContextPath() + request.getServletPath());
         modelAndView.addObject("virtual", exception.isVirtual());
+        modelAndView.addObject("selfAssessment", request.getParameter("selfAssessment"));
 
         return modelAndView;
     }

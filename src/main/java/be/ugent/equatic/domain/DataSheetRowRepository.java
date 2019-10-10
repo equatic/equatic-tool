@@ -11,22 +11,23 @@ public interface DataSheetRowRepository extends JpaRepository<DataSheetRow, Long
                                                         AcademicYear academicYear);
 
     @Query("select dsr.dataSheet, count(dsr.id), count(distinct dsr.partnerInstitution) " +
-            "from DataSheetRow dsr where dsr.institution = ?1 and dsr.academicYear = ?2 group by dsr.dataSheet")
-    List<Object[]> getUploadStatsForInstitutionAndAcademicYear(Institution institution, AcademicYear academicYear);
+            "from DataSheetRow dsr where dsr.institution = ?1 and dsr.academicYear = ?2 and dsr.selfAssessment = ?3 group by dsr.dataSheet")
+    List<Object[]> getUploadStatsForInstitutionAndAcademicYear(Institution institution, AcademicYear academicYear,
+                                                               boolean selfAssessment);
 
     @Query("select dsr.dataSheet, count(dsr.id) " +
             "from DataSheetRow dsr where dsr.academicYear = ?1 group by dsr.dataSheet")
     List<Object[]> getSuperAdminUploadStatsForAcademicYear(AcademicYear academicYear);
 
-    @Query("select distinct dsr.partnerInstitution from DataSheetRow dsr where dsr.institution = ?1")
+    @Query("select distinct dsr.partnerInstitution from DataSheetRow dsr where dsr.institution = ?1 and dsr.selfAssessment = false")
     List<Institution> getPartnerInstitutions(Institution institution);
 
     @Query("select distinct dsr.partnerInstitution from DataSheetRow dsr " +
-            "where dsr.institution in ?1 and dsr.academicYear in ?2")
+            "where dsr.institution in ?1 and dsr.academicYear in ?2 and dsr.selfAssessment = false")
     List<Institution> getPartnerInstitutions(List<Institution> institutions, List<AcademicYear> academicYears);
 
     @Query("select distinct dsr.partnerInstitution from DataSheetRow dsr " +
-            "where dsr.institution in ?1 and dsr.academicYear in ?2 and dsr.partnerInstitution in ?3")
+            "where dsr.institution in ?1 and dsr.academicYear in ?2 and dsr.partnerInstitution in ?3 and dsr.selfAssessment = false")
     List<Institution> getPartnerInstitutionsFiltered(List<Institution> institutions, List<AcademicYear> academicYears,
                                                      List<Institution> filteredInstitutions);
 

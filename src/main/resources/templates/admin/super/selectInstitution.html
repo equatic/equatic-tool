@@ -17,6 +17,8 @@
     <div class="col-md-offset-2 col-md-8">
       <!--/*@thymesVar id="nextAction" type="String"*/-->
       <form class="form-horizontal" th:action="${nextAction}" method="get">
+        <input type="hidden" name="selfAssessment" th:value="${selfAssessment}"/>
+
         <div class="form-group required">
           <label for="select-inst" class="col-sm-4 control-label">Institution</label>
 

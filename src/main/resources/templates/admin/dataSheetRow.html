@@ -1,10 +1,10 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
-<body layout:fragment="dataSheetRow(code,institution,academicYear)">
+<body layout:fragment="dataSheetRow(code,institution,academicYear,selfAssessment)">
 <div class="col-md-7">
   <!--/*@thymesVar id="code" type="java.lang.String"*/-->
   <form th:action="@{dataSheetUpload/{code}(instId=${institution?.id},year=${academicYear.academicYear},
-        code=${code})}"
+        code=${code},selfAssessment=${selfAssessment})}"
         method="post" enctype="multipart/form-data" class="form-inline">
     <!--suppress ThymeleafMessagesResolveInspection -->
     <h5 th:text="#{equatic.admin.uploadData.__${code}__}">
