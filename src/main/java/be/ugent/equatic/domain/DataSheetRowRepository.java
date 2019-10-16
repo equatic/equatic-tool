@@ -31,8 +31,10 @@ public interface DataSheetRowRepository extends JpaRepository<DataSheetRow, Long
     List<Institution> getPartnerInstitutionsFiltered(List<Institution> institutions, List<AcademicYear> academicYears,
                                                      List<Institution> filteredInstitutions);
 
-    List<DataSheetRow> findByDataSheetAndInstitutionAndAcademicYear(DataSheet dataSheet, Institution institution,
-                                                                    AcademicYear academicYear);
+    List<DataSheetRow> findByDataSheetAndInstitutionAndAcademicYearAndSelfAssessment(DataSheet dataSheet,
+                                                                                     Institution institution,
+                                                                                     AcademicYear academicYear,
+                                                                                     boolean selfAssessment);
 
     List<DataSheetRow> findByDataSheetAndAcademicYear(DataSheet dataSheet, AcademicYear academicYear);
 

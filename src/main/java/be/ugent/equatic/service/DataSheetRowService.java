@@ -1095,9 +1095,10 @@ public class DataSheetRowService {
     }
 
     public List<DataSheetRow> findByDataSheetAndInstitutionAndAcademicYear(DataSheet dataSheet, Institution institution,
-                                                                           AcademicYear academicYear) {
-        return dataSheetRowRepository.findByDataSheetAndInstitutionAndAcademicYear(dataSheet, institution,
-                academicYear);
+                                                                           AcademicYear academicYear,
+                                                                           boolean selfAssessment) {
+        return dataSheetRowRepository.findByDataSheetAndInstitutionAndAcademicYearAndSelfAssessment(dataSheet,
+                institution, academicYear, selfAssessment);
     }
 
     public List<DataSheetRow> findByDataSheetAndAcademicYear(DataSheet dataSheet, AcademicYear academicYear) {

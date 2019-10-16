@@ -123,11 +123,12 @@ public class DataSheetUploadController extends InstitutionalAdminController {
 
     @RequestMapping(value = VIEW_DATA_SHEET_EXPORT, method = RequestMethod.GET)
     public void dataSheetExport(@ModelAttribute Institution institution, @ModelAttribute AcademicYear academicYear,
+                                @ModelAttribute("selfAssessment") boolean selfAssessment,
                                 @PathVariable DataSheetCode dataSheetCode, HttpServletResponse response)
             throws IOException, DataSheetValueNotFoundException, DataSheetColumnNotFoundException {
         DataSheet dataSheet = dataSheetService.findByCode(dataSheetCode);
         List<DataSheetRow> dataSheetRows = dataSheetRowService.findByDataSheetAndInstitutionAndAcademicYear(dataSheet,
-                institution, academicYear);
+                institution, academicYear, selfAssessment);
 
         dataSheetService.respondWithDataSheet(response, dataSheet, dataSheetRows);
     }

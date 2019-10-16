@@ -14,7 +14,7 @@
     <span layout:include="fileUpload :: fileUpload"></span>
 
     <a role="button" th:href="@{dataSheetUpload/{code}/export(instId=${institution?.id},
-       year=${academicYear.academicYear},code=${code})}"
+       year=${academicYear.academicYear},code=${code},selfAssessment=${selfAssessment})}"
        class="btn btn-primary btn-sm" th:text="#{equatic.export}">
       Export
     </a>
