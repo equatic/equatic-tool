@@ -1,11 +1,5 @@
 package be.ugent.equatic.web.user.institutional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
 import be.ugent.equatic.domain.AcademicYear;
 import be.ugent.equatic.domain.Institution;
 import be.ugent.equatic.domain.ScoreInterpretation;
@@ -16,6 +10,13 @@ import be.ugent.equatic.service.*;
 import be.ugent.equatic.util.BroadIsced;
 import be.ugent.equatic.web.util.AcademicYearsOptionValidator;
 import be.ugent.equatic.web.util.InstitutionsScoresOptions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -71,12 +72,19 @@ public class InstitutionReportController extends InstitutionalUserController {
     @RequestMapping(value = InstitutionReportController.VIEW_INSTITUTION_REPORT)
     public String institutionReport(@ModelAttribute Institution institution,
                                     @ModelAttribute("options") InstitutionsScoresOptions options,
+                                    @RequestParam(required = false, defaultValue = "false") boolean selfAssessment,
                                     BindingResult result, Model model) {
         institutionsScoresOptionsService.initializeInstitutionsScoresOptions(options);
 
         academicYearsOptionValidator.validate(options, result);
 
         List<Institution> institutions = options.getInstitutions();
+
+        if (selfAssessment) {
+            institutions = Collections.singletonList(institution);
+            options.setInstitutions(institutions);
+        }
+
         if (institutions == null || institutions.size() != 1) {
             result.rejectValue("institutions", "InstitutionsScoresOptions.institutionNotSelected");
         }
