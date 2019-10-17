@@ -83,6 +83,9 @@ public class InstitutionReportController extends InstitutionalUserController {
         if (selfAssessment) {
             institutions = Collections.singletonList(institution);
             options.setInstitutions(institutions);
+            options.setIndicatorCodes(
+                    Arrays.asList(IndicatorCode.SUPPORT_AND_FACILITIES, IndicatorCode.ACADEMIC_QUALITY,
+                            IndicatorCode.COURSE_CATALOGUE_INFORMATION, IndicatorCode.EXCHANGE_OF_ECTS_DOCUMENTS));
         }
 
         if (institutions == null || institutions.size() != 1) {
