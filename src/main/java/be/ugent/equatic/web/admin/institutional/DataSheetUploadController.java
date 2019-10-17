@@ -56,7 +56,11 @@ public class DataSheetUploadController extends InstitutionalAdminController {
     }
 
     @ModelAttribute("dataSheetCodes")
-    private DataSheetCode[] getDataSheetCodes() {
+    private DataSheetCode[] getDataSheetCodes(@ModelAttribute("selfAssessment") boolean selfAssessment) {
+        if (selfAssessment) {
+            return new DataSheetCode[]{DataSheetCode.SMS, DataSheetCode.SMP};
+        }
+
         return new DataSheetCode[]{
                 DataSheetCode.SMS, DataSheetCode.SMP, DataSheetCode.STUDENTS_INCOMING, DataSheetCode.STUDENTS_OUTGOING,
                 DataSheetCode.STAFF_INCOMING, DataSheetCode.STAFF_OUTGOING, DataSheetCode.INSTITUTIONAL_AGREEMENTS,
@@ -141,7 +145,7 @@ public class DataSheetUploadController extends InstitutionalAdminController {
     }
 
     private List<DataSheetUpload> getUploads(@ModelAttribute Institution institution) {
-        return dataSheetUploadService.findByInstitutionAndDataSheetCodeIn(institution, getDataSheetCodes());
+        return dataSheetUploadService.findByInstitutionAndDataSheetCodeIn(institution, getDataSheetCodes(false));
     }
 
     @RequestMapping(value = VIEW_UPLOAD_ERRORS, method = RequestMethod.GET)
