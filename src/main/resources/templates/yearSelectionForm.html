@@ -1,8 +1,9 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
-<body layout:fragment="yearSelectionForm(academicYear,academicYears,institution)">
+<body layout:fragment="yearSelectionForm(academicYear,academicYears,institution,selfAssessment)">
 <form class="form-inline margin-bottom" method="get">
   <input type="hidden" name="instId" th:value="${institution.id}" th:if="${institution}"/>
+  <input type="hidden" name="selfAssessment" th:value="${selfAssessment}" th:if="${selfAssessment}"/>
 
   <div class="form-group">
     <label for="select-year" class="control-label">Academic year</label>
