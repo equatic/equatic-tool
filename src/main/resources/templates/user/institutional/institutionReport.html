@@ -1,8 +1,12 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
       layout:decorator="layout">
+<!--/*@thymesVar id="selfAssessment" type="boolean"*/-->
 <head>
-  <title th:text="#{equatic.user.institutional.institutionReport.title}">
+  <title th:text="#{equatic.user.institutional.selfAssessmentReport.title}" th:if="${selfAssessment}">
+    Title
+  </title>
+  <title th:text="#{equatic.user.institutional.institutionReport.title}" th:unless="${selfAssessment}">
     Title
   </title>
   <link rel="stylesheet" th:href="@{/css/select2.css}" href="../../../static/css/select2.css"/>
@@ -18,8 +22,13 @@
           src="../../../static/js/NumberGauge.min.js"></script>
 </head>
 <body>
-<div layout:fragment="title" th:text="#{equatic.user.institutional.institutionReport.title}">
-  Title
+<div layout:fragment="title">
+  <span th:text="#{equatic.user.institutional.selfAssessmentReport.title}" th:if="${selfAssessment}">
+    Title
+  </span>
+  <span th:text="#{equatic.user.institutional.institutionReport.title}" th:unless="${selfAssessment}">
+    Title
+  </span>
 </div>
 <div layout:fragment="container" class="container">
   <!--/*@thymesVar id="institutionSelected" type="be.ugent.equatic.domain.Institution"*/-->

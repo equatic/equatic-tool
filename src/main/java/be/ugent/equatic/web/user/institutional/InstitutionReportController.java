@@ -86,6 +86,8 @@ public class InstitutionReportController extends InstitutionalUserController {
             options.setIndicatorCodes(
                     Arrays.asList(IndicatorCode.SUPPORT_AND_FACILITIES, IndicatorCode.ACADEMIC_QUALITY,
                             IndicatorCode.COURSE_CATALOGUE_INFORMATION, IndicatorCode.EXCHANGE_OF_ECTS_DOCUMENTS));
+
+            model.addAttribute("selfAssessment", true);
         }
 
         if (institutions == null || institutions.size() != 1) {
