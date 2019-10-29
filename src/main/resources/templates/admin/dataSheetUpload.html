@@ -1,16 +1,25 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
       layout:decorator="layout">
+<!--/*@thymesVar id="selfAssessment" type="boolean"*/-->
 <head>
-  <title th:text="#{equatic.admin.dataSheetUpload.title}">
+  <title th:text="#{equatic.admin.dataSheetUploadSelfAssessment.title}" th:if="${selfAssessment}">
+    Title
+  </title>
+  <title th:text="#{equatic.admin.dataSheetUpload.title}" th:unless="${selfAssessment}">
     Title
   </title>
   <link rel="stylesheet" th:href="@{/css/file-upload.css}"/>
   <script type="text/javascript" th:src="@{/js/file-upload.js}"></script>
 </head>
 <body>
-<div layout:fragment="title" th:text="#{equatic.admin.dataSheetUpload.title}">
-  Title
+<div layout:fragment="title">
+  <span th:text="#{equatic.admin.dataSheetUploadSelfAssessment.title}" th:if="${selfAssessment}">
+    Title
+  </span>
+  <span th:text="#{equatic.admin.dataSheetUpload.title}" th:unless="${selfAssessment}">
+    Title
+  </span>
 </div>
 <div layout:fragment="container" class="container">
   <div layout:include="message :: message(message=${message})">

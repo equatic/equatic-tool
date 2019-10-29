@@ -92,8 +92,9 @@ public class DataSheetUploadController extends InstitutionalAdminController {
     }
 
     @RequestMapping(value = VIEW_DATA_SHEET_UPLOAD_PAGE, method = RequestMethod.GET)
-    public String dataSheetUpload(Model model) {
+    public String dataSheetUpload(Model model, @ModelAttribute("selfAssessment") boolean selfAssessment) {
         model.addAttribute("academicYears", academicYearService.findAll());
+        model.addAttribute("selfAssessment", selfAssessment);
 
         return "admin/dataSheetUpload";
     }
