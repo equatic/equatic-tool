@@ -1,7 +1,5 @@
 package be.ugent.equatic.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import be.ugent.equatic.cluster.Cluster;
 import be.ugent.equatic.cluster.ClusterCode;
 import be.ugent.equatic.domain.AcademicYear;
@@ -13,6 +11,8 @@ import be.ugent.equatic.indicator.IndicatorCode;
 import be.ugent.equatic.indicator.Score;
 import be.ugent.equatic.web.util.InstitutionsScoresMode;
 import be.ugent.equatic.web.util.InstitutionsScoresOptions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -149,7 +149,8 @@ public class InstitutionsScoresService {
         return institutionsScoresMapList;
     }
 
-    public List<Explanation> getExplanations(Institution institution, InstitutionsScoresOptions options) {
+    public List<Explanation> getExplanations(Institution institution, InstitutionsScoresOptions options,
+                                             boolean selfAssessment) {
         List<Explanation> explanations = new ArrayList<>();
         List<AcademicYear> academicYears = academicYearService.findYearBetween(options.getAcademicYearFrom(),
                 options.getAcademicYearTo());
@@ -162,7 +163,7 @@ public class InstitutionsScoresService {
         for (IndicatorCode indicatorCode : options.getIndicatorCodes()) {
             Indicator indicator = indicatorCode.getIndicator();
             Explanation explanation = indicator.getInstitutionReportExplanation(institution,
-                    academicYears, options.getIsceds(), partnerInstitution, dataSheetRowService);
+                    academicYears, options.getIsceds(), partnerInstitution, dataSheetRowService, selfAssessment);
             explanations.add(explanation);
         }
 

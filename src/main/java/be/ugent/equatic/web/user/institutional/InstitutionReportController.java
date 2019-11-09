@@ -107,7 +107,8 @@ public class InstitutionReportController extends InstitutionalUserController {
                     Collections.singletonList(institution), institutionsScoresOptions);
             institutionScores = resultMap.get(institutionSelected);
 
-            List<Explanation> explanations = institutionsScoresService.getExplanations(institution, options);
+            List<Explanation> explanations =
+                    institutionsScoresService.getExplanations(institution, options, selfAssessment);
             model.addAttribute("explanations", explanations);
         }
 

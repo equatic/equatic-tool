@@ -24,7 +24,7 @@ public class RankingsIndicator implements Indicator {
     @Override
     public Explanation getInstitutionReportExplanation(Institution institution, List<AcademicYear> academicYears,
                                                        List<Isced> isceds, Institution partnerInstitution,
-                                                       DataSheetRowService dataSheetRowService) {
+                                                       DataSheetRowService dataSheetRowService, boolean selfAssessment) {
         AcademicYear academicYear =
                 dataSheetRowService.getMostRecentAcademicYearByDataSheetCode(DataSheetCode.RANKINGS);
 

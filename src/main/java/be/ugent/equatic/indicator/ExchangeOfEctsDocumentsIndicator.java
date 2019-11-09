@@ -35,7 +35,7 @@ public class ExchangeOfEctsDocumentsIndicator extends IndicatorFromScalarTuples 
     @Override
     public Explanation getInstitutionReportExplanation(Institution institution, List<AcademicYear> academicYears,
                                                        List<Isced> isceds, Institution partnerInstitution,
-                                                       DataSheetRowService dataSheetRowService) {
+                                                       DataSheetRowService dataSheetRowService, boolean selfAssessment) {
         boolean isGradingTableAvailable = dataSheetRowService.isGradingTableAvailable(partnerInstitution,
                 academicYears);
         Integer laSignedPercentage =

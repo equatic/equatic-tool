@@ -23,7 +23,7 @@ public class CourseCatalogueInformationIndicator extends IndicatorFromScalarTupl
     @Override
     public Explanation getInstitutionReportExplanation(Institution institution, List<AcademicYear> academicYears,
                                                        List<Isced> isceds, Institution partnerInstitution,
-                                                       DataSheetRowService dataSheetRowService) {
+                                                       DataSheetRowService dataSheetRowService, boolean selfAssessment) {
         int allRowsCount =
                 dataSheetRowService.countRowsWithColumn(institution, academicYears, isceds, partnerInstitution,
                         DataSheetColumnCode.SMS_COURSE_CATALOGUE);

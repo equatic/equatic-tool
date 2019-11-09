@@ -25,7 +25,7 @@ public class PerformanceOfOutgoingStudentsIndicator extends IndicatorFromScalarT
     @Override
     public Explanation getInstitutionReportExplanation(Institution institution, List<AcademicYear> academicYears,
                                                        List<Isced> isceds, Institution partnerInstitution,
-                                                       DataSheetRowService dataSheetRowService) {
+                                                       DataSheetRowService dataSheetRowService, boolean selfAssessment) {
         Double averageCreditsPerDay = dataSheetRowService.getAverageCreditsPerDay(institution, academicYears, isceds,
                 partnerInstitution, DataSheetCode.STUDENTS_OUTGOING);
         Integer studySuccessPercentage = dataSheetRowService.getStudySuccessPercentage(institution, academicYears,

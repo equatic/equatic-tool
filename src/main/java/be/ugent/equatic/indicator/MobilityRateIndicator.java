@@ -24,7 +24,7 @@ public class MobilityRateIndicator extends IndicatorFromScalarTuples {
     @Override
     public Explanation getInstitutionReportExplanation(Institution institution, List<AcademicYear> academicYears,
                                                        List<Isced> isceds, Institution partnerInstitution,
-                                                       DataSheetRowService dataSheetRowService) {
+                                                       DataSheetRowService dataSheetRowService, boolean selfAssessment) {
         Integer outgoingStudents = dataSheetRowService.getDataSheetRowsCount(institution, academicYears, isceds,
                 partnerInstitution, DataSheetCode.STUDENTS_OUTGOING);
         Integer outgoingStaff = dataSheetRowService.getDataSheetRowsCount(institution, academicYears, isceds,

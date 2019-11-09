@@ -16,7 +16,7 @@ public interface Indicator {
 
     Explanation getInstitutionReportExplanation(Institution institution, List<AcademicYear> academicYears,
                                                 List<Isced> isceds, Institution partnerInstitution,
-                                                DataSheetRowService dataSheetRowService);
+                                                DataSheetRowService dataSheetRowService, boolean selfAssessment);
 
     Map<Long, Score> getPartnerInstitutionsScoreMap(List<Institution> institutions,
                                                     List<AcademicYear> academicYears, List<Isced> isceds,

@@ -32,7 +32,8 @@ public class AcademicQualityIndicator extends IndicatorFromScalarTuples {
     @Override
     public Explanation getInstitutionReportExplanation(Institution institution, List<AcademicYear> academicYears,
                                                        List<Isced> isceds, Institution partnerInstitution,
-                                                       DataSheetRowService dataSheetRowService) {
+                                                       DataSheetRowService dataSheetRowService,
+                                                       boolean selfAssessment) {
         Optional<Double> learningSubscore =
                 getSubscoreFromDefaultValues(institution, academicYears, isceds, partnerInstitution,
                         dataSheetRowService, DataSheetColumnCode.SMS_QUALITY_LEARNING);
@@ -47,7 +48,8 @@ public class AcademicQualityIndicator extends IndicatorFromScalarTuples {
                         dataSheetRowService, DataSheetColumnCode.SMP_QUALITY);
 
         return new Explanation(
-                new String[]{"The indicator on academic quality is based on the feedback of outgoing students to " +
+                new String[]{"The indicator on academic quality is based on the feedback of " +
+                        (selfAssessment ? "incoming" : "outgoing") + " students to " +
                         partnerInstitution.getDisplayName() + ". In the context of this indicator, academic quality is " +
                         "the combination of three elements: degree of learning support; quality of teaching methods and " +
                         "quality of the course content<sup>2</sup>.",

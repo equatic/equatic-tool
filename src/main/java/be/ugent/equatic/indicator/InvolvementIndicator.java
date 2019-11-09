@@ -26,7 +26,7 @@ public class InvolvementIndicator implements Indicator {
     @Override
     public Explanation getInstitutionReportExplanation(Institution institution, List<AcademicYear> academicYears,
                                                        List<Isced> isceds, Institution partnerInstitution,
-                                                       DataSheetRowService dataSheetRowService) {
+                                                       DataSheetRowService dataSheetRowService, boolean selfAssessment) {
         Map<Long, IscedStat> partnerInstitutionsIscedStatMap = dataSheetRowService.getPartnerInstitutionsIscedStatMap(
                 Collections.singletonList(institution), academicYears, isceds,
                 Collections.singletonList(partnerInstitution));

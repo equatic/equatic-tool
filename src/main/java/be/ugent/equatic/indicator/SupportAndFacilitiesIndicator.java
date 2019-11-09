@@ -43,7 +43,8 @@ public class SupportAndFacilitiesIndicator extends IndicatorFromScalarTuples {
     @Override
     public Explanation getInstitutionReportExplanation(Institution institution, List<AcademicYear> academicYears,
                                                        List<Isced> isceds, Institution partnerInstitution,
-                                                       DataSheetRowService dataSheetRowService) {
+                                                       DataSheetRowService dataSheetRowService,
+                                                       boolean selfAssessment) {
         Optional<Double> supportSubscore = dataSheetRowService.getSupportSubscore(institution, academicYears, isceds,
                 partnerInstitution);
         Optional<Double> facilitiesSubscore = dataSheetRowService.getFacilitiesSubscore(institution, academicYears,
@@ -52,9 +53,11 @@ public class SupportAndFacilitiesIndicator extends IndicatorFromScalarTuples {
         return new Explanation(
                 new String[]{
                         "Support and facilities at the host institution gives an indication of " +
-                                "the satisfaction of outgoing students with the support and facilities at " +
-                                partnerInstitution.getDisplayName() + ". The score for this indicator is based on feedback " +
-                                "from outgoing students.",
+                                "the satisfaction of " + (selfAssessment ? "incoming" : "outgoing") +
+                                " students with the support and facilities at " +
+                                partnerInstitution.getDisplayName() +
+                                ". The score for this indicator is based on feedback from " +
+                                (selfAssessment ? "incoming" : "outgoing") + " students.",
                         "To calculate the indicator score the support-questions count for 80% towards the final score, " +
                                 "the facilities count for 20% (if this information is available<sup>1</sup>).",
                         "<small><sup>1</sup> For institutions that only host trainee students, facilities will not be taken " +

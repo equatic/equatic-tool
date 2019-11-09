@@ -25,7 +25,7 @@ public class EducationalCooperationIndicator implements Indicator {
     @Override
     public Explanation getInstitutionReportExplanation(Institution institution, List<AcademicYear> academicYears,
                                                        List<Isced> isceds, Institution partnerInstitution,
-                                                       DataSheetRowService dataSheetRowService) {
+                                                       DataSheetRowService dataSheetRowService, boolean selfAssessment) {
         return new Explanation(
                 new String[]{"The total score is a combination of a subscore for projects and a subscore for" +
                         "programmes where both elements get the same weight in the calculation of the indicator" +
