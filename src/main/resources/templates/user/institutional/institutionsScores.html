@@ -68,9 +68,9 @@
             10.0
           </span><sup aria-hidden="true" data-toggle="modal"
                       th:attr="data-target='#modal-' + ${scoresEntry.key.id} + '-' + ${iterStat.index}"
-                      th:if="${score.studentsCount}"><span th:text="${score.studentsCount}" class="students-count">
+                      th:if="${score.studentsCount}"><a th:text="${score.studentsCount}" class="students-count">
             5
-          </span></sup>
+          </a></sup>
           <div th:id="'modal-' + ${scoresEntry.key.id} + '-' + ${iterStat.index}" class="modal fade" tabindex="-1" role="dialog">
             <div class="modal-dialog">
               <div class="modal-content">
@@ -109,7 +109,7 @@
               var score = Math.round($(this).data('value'));
               var properties = {
                   value: score,
-                  thresholds: '0,0'
+                  thresholds: score + ',' + score + 1
               };
 
               var standardError = $(this).data('standardError');
