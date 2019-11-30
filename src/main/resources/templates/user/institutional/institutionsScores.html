@@ -71,7 +71,8 @@
                       th:if="${score.studentsCount}"><a th:text="${score.studentsCount}" class="students-count">
             5
           </a></sup>
-          <div th:id="'modal-' + ${scoresEntry.key.id} + '-' + ${iterStat.index}" class="modal fade" tabindex="-1" role="dialog">
+          <div th:id="'modal-' + ${scoresEntry.key.id} + '-' + ${iterStat.index}" th:if="${score.standardError}"
+               class="modal fade" tabindex="-1" role="dialog">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-body">
