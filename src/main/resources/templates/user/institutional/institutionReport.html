@@ -41,9 +41,9 @@
     </div>
   </div>
 
-  <div layout:include="institutionsScoresForm :: institutionsScoresForm(@{/user/institutional/institutionReport},
+  <div layout:include="institutionsScoresForm :: institutionsScoresForm(@{/user/institutional/institutionReport(selfAssessment=${selfAssessment})},
     ${options},${institution},${allIndicatorCodes},${allAcademicYears},${allPartnerInstitutions},${allBroadIsceds},
-    false,false,true)">
+    false,false,${selfAssessment == null})">
     Institutions scores form
   </div>
 
