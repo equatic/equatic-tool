@@ -753,7 +753,7 @@
         <profile>
             <id>equatic</id>
             <properties>
-                <equatic-test-db.url>jdbc:oracle:thin:@oradevp01.ugent.be:1521:devequat</equatic-test-db.url>
+                <equatic-test-db.url>jdbc:oracle:thin:@devequat.ugent.be:1521/devequat</equatic-test-db.url>
             </properties>
 
             <repositories>
