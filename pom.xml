@@ -30,7 +30,7 @@
         <poi.version>3.17</poi.version>
         <poi-ooxml.version>3.17</poi-ooxml.version>
         <spring-security-saml2-core.version>1.0.2.RELEASE</spring-security-saml2-core.version>
-        <equatic-test-db.url>jdbc:oracle:thin:@oradevp01.ugent.be:1521:devequat</equatic-test-db.url>
+        <equatic-test-db.url>jdbc:oracle:thin:@devequat.ugent.be:1521/devequat</equatic-test-db.url>
     </properties>
 
     <dependencies>
