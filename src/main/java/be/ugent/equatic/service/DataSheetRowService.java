@@ -915,7 +915,7 @@ public class DataSheetRowService {
         String rawQuery = EDUCATIONAL_COOPERATION_QUERY;
 
         if (filteredInstitutions != null) {
-            rawQuery += "AND PARTNER_INST_ID IN (:partnerInstitutions) ";
+            rawQuery += "AND PARTNER_PROJECTS.PARTNER_INST_ID IN (:partnerInstitutions) ";
         }
 
         SQLQuery query = session.createSQLQuery(rawQuery);
