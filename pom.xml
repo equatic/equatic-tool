@@ -27,7 +27,7 @@
         <flyway.version>3.2.1</flyway.version>
         <guava.version>27.1-jre</guava.version>
         <ojdbc8.version>12.2.0.1</ojdbc8.version>
-        <poi.version>3.17</poi.version>
+        <poi.version>4.1.1</poi.version>
         <poi-ooxml.version>3.17</poi-ooxml.version>
         <spring-security-saml2-core.version>1.0.2.RELEASE</spring-security-saml2-core.version>
         <equatic-test-db.url>jdbc:oracle:thin:@oradevp01.ugent.be:1521:devequat</equatic-test-db.url>
